@@ -6,12 +6,12 @@ from flask import (Flask, Response, redirect, render_template, request,
 from PIL import Image
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_ultimate_prod')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_final_prod')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 终极全球语言包 (22种语言 / Top 95% Coverage)
+# 1. 终极全球语言包 (Key='name' 均为母语自称)
 # ==========================================
 TRANSLATIONS = {
     'en': { 'name': 'English', 'dir': 'ltr', 'seo_title': 'Free Online ICO Converter - Create Transparent Favicon', 'seo_desc': 'Convert PNG, JPG to ICO format online. Support transparent background. Professional Favicon generator tool.', 'h1': 'ICO Converter', 'subtitle': 'Professional Favicon Generator', 'upload_label': 'Click to upload or Drag image', 'size_label': 'Target Size', 'btn_submit': 'Generate ICO', 'footer': 'Securely processed. Privacy protected.', 'error_large': 'File too large (Max 4MB)' },
@@ -50,7 +50,13 @@ def render_index(lang_code):
         return redirect(f"/{DEFAULT_LANG}")
 
     base_url = request.url_root.rstrip('/')
-    alternates = [{'lang': l, 'href': f"{base_url}/{l}"} for l in SUPPORTED_LANGS]
+
+    # 【关键修改】这里我们将 name (母语全称) 也传给前端，用于显示
+    alternates = [{
+        'lang': l,
+        'name': TRANSLATIONS[l]['name'],
+        'href': f"{base_url}/{l}"
+    } for l in SUPPORTED_LANGS]
 
     return render_template(
         'index.html',
@@ -59,7 +65,7 @@ def render_index(lang_code):
         alternates=alternates
     )
 
-# 显式注册所有路由，解决 Vercel 404 问题
+# 显式注册所有路由
 for lang in SUPPORTED_LANGS:
     app.add_url_rule(
         f'/{lang}',
@@ -89,15 +95,12 @@ def root():
 
 @app.route('/generate', methods=['POST'])
 def generate_ico():
-    # 修复 Vercel 图像读取问题
     if 'file' not in request.files: return "Error", 400
     file = request.files['file']
     if file.filename == '': return "Error", 400
 
     try:
         size = int(request.form.get('size', '32'))
-
-        # 必须先读入内存
         file_bytes = file.read()
         if len(file_bytes) == 0: return "Error: Empty file", 400
         input_stream = io.BytesIO(file_bytes)
