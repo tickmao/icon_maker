@@ -3,10 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
-    <link rel="icon" href="/favicon.ico?v=2" type="image/x-icon" />
-    <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
-
+    <link rel="icon" href="/favicon.ico?v=3" type="image/x-icon" />
     <title>{{ t.seo_title }}</title>
     <meta name="description" content="{{ t.seo_desc }}" />
 
@@ -30,7 +27,6 @@
       .animate-fade-in {
         animation: fade-in 0.5s ease-out;
       }
-
       .lang-scroll::-webkit-scrollbar {
         width: 6px;
       }
@@ -44,7 +40,6 @@
       .lang-scroll::-webkit-scrollbar-thumb:hover {
         background: #9ca3af;
       }
-
       html[dir='rtl'] body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
@@ -73,7 +68,6 @@
             ></path>
           </svg>
         </button>
-
         <div
           id="lang-menu"
           class="hidden absolute right-0 rtl:right-auto rtl:left-0 top-10 w-80 bg-white rounded-lg shadow-2xl border border-gray-100 overflow-hidden transform transition-all origin-top-right z-30"
@@ -168,11 +162,11 @@
 
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-3">{{ t.size_label }}</label>
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-4">
             <label class="cursor-pointer relative">
               <input type="radio" name="size" value="16" class="peer sr-only" />
               <div
-                class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex items-center justify-center text-sm font-medium"
+                class="p-3 h-full border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex items-center justify-center text-sm font-medium"
               >
                 16 x 16
               </div>
@@ -181,11 +175,15 @@
             <label class="cursor-pointer relative group">
               <input type="radio" name="size" value="32" checked class="peer sr-only" />
               <div
-                class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex items-center justify-center text-sm font-medium relative ring-2 ring-transparent peer-checked:ring-green-500 peer-checked:shadow-sm z-0"
+                class="p-2 h-full border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex flex-col items-center justify-center relative ring-2 ring-transparent peer-checked:ring-green-500 peer-checked:shadow-sm z-0"
               >
-                32 x 32 ({{ t.recommend }})
+                <span class="text-sm font-bold">32 x 32</span>
+                <span class="text-xs opacity-80 mt-0.5 text-center leading-tight"
+                  >{{ t.recommend }}</span
+                >
+
                 <span
-                  class="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow transform scale-100 transition-transform z-10"
+                  class="absolute -top-2 -right-2 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow transform scale-100 transition-transform z-10 whitespace-nowrap"
                 >
                   {{ t.badge }}
                 </span>
@@ -195,7 +193,7 @@
             <label class="cursor-pointer relative">
               <input type="radio" name="size" value="48" class="peer sr-only" />
               <div
-                class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex items-center justify-center text-sm font-medium"
+                class="p-3 h-full border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex items-center justify-center text-sm font-medium"
               >
                 48 x 48
               </div>
@@ -203,7 +201,7 @@
             <label class="cursor-pointer relative">
               <input type="radio" name="size" value="64" class="peer sr-only" />
               <div
-                class="p-3 border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex items-center justify-center text-sm font-medium"
+                class="p-3 h-full border border-gray-200 rounded-lg hover:bg-gray-50 peer-checked:border-green-500 peer-checked:bg-green-50 peer-checked:text-green-700 transition-all flex items-center justify-center text-sm font-medium"
               >
                 64 x 64
               </div>
@@ -237,10 +235,8 @@
     <script>
       function toggleLangMenu(e) {
         e.stopPropagation()
-        const menu = document.getElementById('lang-menu')
-        menu.classList.toggle('hidden')
+        document.getElementById('lang-menu').classList.toggle('hidden')
       }
-
       function closeLangMenu(e) {
         const menu = document.getElementById('lang-menu')
         const btn = document.getElementById('lang-btn')
@@ -248,11 +244,9 @@
           !menu.classList.contains('hidden') &&
           !menu.contains(e.target) &&
           !btn.contains(e.target)
-        ) {
+        )
           menu.classList.add('hidden')
-        }
       }
-
       function handleFileSelect(input) {
         if (input.files && input.files[0]) {
           const file = input.files[0]
