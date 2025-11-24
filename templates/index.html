@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>{{ t.seo_title }}</title>
     <meta name="description" content="{{ t.seo_desc }}">
 
@@ -16,24 +15,26 @@
     <style>
         @keyframes fade-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .animate-fade-in { animation: fade-in 0.5s ease-out; }
-
-        /* 针对 RTL 语言优化字体显示 */
         html[dir="rtl"] body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4 font-sans text-gray-700 relative">
 
-    <div class="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-10">
-        <select onchange="location = this.value;" class="bg-white border border-gray-300 text-gray-700 py-1 px-3 rounded text-sm focus:outline-none focus:border-green-500 shadow-sm cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
-            {% for alt in alternates %}
-            <option value="/{{ alt.lang }}" {% if alt.lang == current_lang %}selected{% endif %}>
-                {{ t.name if alt.lang == current_lang else alt.lang|upper }}
-            </option>
-            {% endfor %}
+    <div class="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20">
+        <select onchange="location = this.value;" class="bg-white border border-gray-200 text-gray-600 text-sm py-1 px-3 rounded shadow-sm hover:border-gray-400 focus:outline-none focus:border-green-500 cursor-pointer transition-colors">
+            {% if alternates %}
+                {% for alt in alternates %}
+                <option value="/{{ alt.lang }}" {% if alt.lang == current_lang %}selected{% endif %}>
+                    {{ t.name if alt.lang == current_lang else alt.lang|upper }}
+                </option>
+                {% endfor %}
+            {% else %}
+                <option>{{ current_lang|upper }}</option>
+            {% endif %}
         </select>
     </div>
 
-    <div class="animate-fade-in bg-white w-full max-w-md rounded-xl shadow-xl overflow-hidden border-t-4 border-green-500">
+    <div class="animate-fade-in bg-white w-full max-w-md rounded-xl shadow-xl overflow-hidden border-t-4 border-green-500 z-10">
 
         <div class="p-8 text-center border-b border-gray-100">
             <div class="inline-flex items-center justify-center w-14 h-14 bg-green-100 text-green-600 rounded-full mb-4 shadow-sm">
