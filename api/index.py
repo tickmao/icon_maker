@@ -3,15 +3,15 @@ import os
 
 from flask import (Flask, Response, redirect, render_template, request,
                    send_file)
-from PIL import Image
+from PIL import Image, ImageDraw
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_final_prod')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_ultimate_prod')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 终极全球语言包 (Key='name' 均为母语自称)
+# 1. 终极全球语言包
 # ==========================================
 TRANSLATIONS = {
     'en': { 'name': 'English', 'dir': 'ltr', 'seo_title': 'Free Online ICO Converter - Create Transparent Favicon', 'seo_desc': 'Convert PNG, JPG to ICO format online. Support transparent background. Professional Favicon generator tool.', 'h1': 'ICO Converter', 'subtitle': 'Professional Favicon Generator', 'upload_label': 'Click to upload or Drag image', 'size_label': 'Target Size', 'btn_submit': 'Generate ICO', 'footer': 'Securely processed. Privacy protected.', 'error_large': 'File too large (Max 4MB)' },
@@ -50,8 +50,6 @@ def render_index(lang_code):
         return redirect(f"/{DEFAULT_LANG}")
 
     base_url = request.url_root.rstrip('/')
-
-    # 【关键修改】这里我们将 name (母语全称) 也传给前端，用于显示
     alternates = [{
         'lang': l,
         'name': TRANSLATIONS[l]['name'],
@@ -65,14 +63,8 @@ def render_index(lang_code):
         alternates=alternates
     )
 
-# 显式注册所有路由
 for lang in SUPPORTED_LANGS:
-    app.add_url_rule(
-        f'/{lang}',
-        endpoint=f'view_{lang}',
-        view_func=render_index,
-        defaults={'lang_code': lang}
-    )
+    app.add_url_rule(f'/{lang}', endpoint=f'view_{lang}', view_func=render_index, defaults={'lang_code': lang})
 
 @app.errorhandler(404)
 def page_not_found(e):
@@ -82,7 +74,6 @@ def page_not_found(e):
 def root():
     accept_lang = request.headers.get('Accept-Language', '')
     target = DEFAULT_LANG
-
     if 'zh-CN' in accept_lang: target = 'zh'
     elif 'zh-TW' in accept_lang: target = 'tw'
     else:
@@ -90,7 +81,6 @@ def root():
             if lang in accept_lang:
                 target = lang
                 break
-
     return redirect(f"/{target}")
 
 @app.route('/generate', methods=['POST'])
@@ -106,21 +96,14 @@ def generate_ico():
         input_stream = io.BytesIO(file_bytes)
 
         img = Image.open(input_stream)
-        if img.mode != "RGBA":
-            img = img.convert("RGBA")
-
+        if img.mode != "RGBA": img = img.convert("RGBA")
         img = img.resize((size, size), Image.Resampling.LANCZOS)
 
         output_stream = io.BytesIO()
         img.save(output_stream, format='ICO', sizes=[(size, size)])
         output_stream.seek(0)
 
-        return send_file(
-            output_stream,
-            mimetype='image/x-icon',
-            as_attachment=True,
-            download_name='favicon.ico'
-        )
+        return send_file(output_stream, mimetype='image/x-icon', as_attachment=True, download_name='favicon.ico')
     except Exception as e:
         print(f"Error: {str(e)}")
         return "Invalid image file", 500
@@ -133,3 +116,30 @@ def sitemap():
         urls.append(f"<url><loc>{base_url}/{lang}</loc><changefreq>weekly</changefreq></url>")
     xml = f"""<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{''.join(urls)}</urlset>"""
     return Response(xml, mimetype="application/xml")
+
+# ==========================================
+# 【新增】动态生成 Favicon (无需静态文件)
+# ==========================================
+@app.route('/favicon.ico')
+def favicon():
+    # 创建一个 32x32 的透明背景画布
+    size = 32
+    img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(img)
+
+    # 1. 画一个绿色的圆角矩形背景 (Tailwind green-600: #16a34a)
+    # 由于 PIL 没有简单的 rounded_rectangle 完美抗锯齿，我们画一个绿色的圆代替，效果更好
+    draw.ellipse([0, 0, 32, 32], fill='#16a34a')
+
+    # 2. 画一个简单的白色文档图标 (中间)
+    # 矩形主体
+    draw.rectangle([10, 7, 22, 25], fill='white')
+    # 上面的折角效果 (用绿色遮盖右上角)
+    draw.polygon([(22, 7), (17, 7), (22, 12)], fill='#16a34a')
+
+    # 输出到内存流
+    img_io = io.BytesIO()
+    img.save(img_io, 'ICO')
+    img_io.seek(0)
+
+    return send_file(img_io, mimetype='image/vnd.microsoft.icon')
