@@ -3,15 +3,17 @@ import os
 
 from flask import (Flask, Response, redirect, render_template, request,
                    send_file)
-from PIL import Image, ImageDraw
+from PIL import Image
+
+# 注意：删除了 ImageDraw，因为不需要画图了
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_final_v3')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_static_v1')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 终极全球语言包 (Translation)
+# 1. 终极全球语言包
 # ==========================================
 TRANSLATIONS = {
     'en': { 'name': 'English', 'dir': 'ltr', 'recommend': 'Recommended', 'badge': 'HOT', 'seo_title': 'Free Online ICO Converter', 'seo_desc': 'Convert PNG/JPG to ICO. Professional tool.', 'h1': 'ICO Converter', 'subtitle': 'Professional Favicon Generator', 'upload_label': 'Click to upload or Drag image', 'size_label': 'Target Size', 'btn_submit': 'Generate ICO', 'footer': 'Securely processed. Privacy protected.', 'error_large': 'File too large (Max 4MB)' },
@@ -95,3 +97,12 @@ def sitemap():
         urls.append(f"<url><loc>{base_url}/{lang}</loc><changefreq>weekly</changefreq></url>")
     xml = f"""<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{''.join(urls)}</urlset>"""
     return Response(xml, mimetype="application/xml")
+
+# ==========================================
+# 3. 读取本地的 favicon.ico 文件
+# ==========================================
+@app.route('/favicon.ico')
+def favicon():
+    # 发送项目根目录下的 favicon.ico 文件
+    # 注意：'../favicon.ico' 是相对于当前 api/ 文件夹的路径
+    return send_file('../favicon.ico', mimetype='image/vnd.microsoft.icon')
