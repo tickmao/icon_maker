@@ -3,15 +3,16 @@ import os
 
 from flask import (Flask, Response, redirect, render_template, request,
                    send_file)
-from PIL import Image, ImageDraw
+from PIL import Image
 
+# 注意：不再需要 ImageDraw，因为我们直接读取你的文件
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_app_v1')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_final_v4')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 终极全球语言包
+# 1. 终极全球语言包 (包含 Tab 和 Guide 文案)
 # ==========================================
 EN_GUIDE = {
     'tab_create': 'Create',
@@ -52,7 +53,7 @@ TRANSLATIONS = {
         'guide_copied': '已複製!',
     },
 
-    # --- 其他语言 (合并 EN_GUIDE) ---
+    # --- 其他语言 (使用 EN_GUIDE 填充) ---
     'es': { **EN_GUIDE, 'name': 'Español', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT', 'seo_title': 'Convertidor ICO Online', 'seo_desc': 'Convierte imágenes a ICO.', 'h1': 'Convertidor ICO', 'subtitle': 'Generador de Favicon', 'upload_label': 'Clic para subir', 'size_label': 'Tamaño', 'btn_submit': 'Generar .ICO', 'footer': 'Privacidad protegida.', 'error_large': 'Archivo muy grande' },
     'fr': { **EN_GUIDE, 'name': 'Français', 'dir': 'ltr', 'recommend': 'Recommandé', 'badge': 'TOP', 'seo_title': 'Convertisseur ICO', 'seo_desc': 'Convertir en ICO.', 'h1': 'Convertisseur ICO', 'subtitle': 'Générateur de Favicon', 'upload_label': 'Uploader une image', 'size_label': 'Taille', 'btn_submit': 'Générer .ICO', 'footer': 'Confidentialité respectée.', 'error_large': 'Fichier trop volumineux' },
     'de': { **EN_GUIDE, 'name': 'Deutsch', 'dir': 'ltr', 'recommend': 'Empfohlen', 'badge': 'TOP', 'seo_title': 'ICO Konverter', 'seo_desc': 'In ICO umwandeln.', 'h1': 'ICO Konverter', 'subtitle': 'Favicon-Generator', 'upload_label': 'Bild hochladen', 'size_label': 'Größe', 'btn_submit': '.ICO Herunterladen', 'footer': 'Datenschutz.', 'error_large': 'Datei zu groß' },
@@ -132,6 +133,11 @@ def sitemap():
     xml = f"""<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{''.join(urls)}</urlset>"""
     return Response(xml, mimetype="application/xml")
 
+# ==========================================
+# 3. 关键修复：读取你上传的本地 favicon.ico
+# ==========================================
 @app.route('/favicon.ico')
 def favicon():
+    # 这里读取的是项目根目录下的 favicon.ico
+    # 只要你确保文件在根目录，它就会显示
     return send_file('../favicon.ico', mimetype='image/vnd.microsoft.icon')
