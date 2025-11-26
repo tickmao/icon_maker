@@ -3,20 +3,21 @@ import os
 
 from flask import (Flask, Response, redirect, render_template, request,
                    send_file)
-from PIL import Image
+from PIL import Image, ImageDraw
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_creative')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_app_v1')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
 # 1. 终极全球语言包
 # ==========================================
-# 通用英文指引
 EN_GUIDE = {
+    'tab_create': 'Create',
+    'tab_guide': 'Guide',
     'guide_what_title': 'Instant Recognition',
-    'guide_what_desc': 'Your icon lives here. It makes your tab stand out.',
+    'guide_what_desc': 'Your icon lives here.',
     'guide_how_title': 'Easy Integration',
     'guide_copy_btn': 'Copy',
     'guide_copied': 'Copied!',
@@ -29,9 +30,10 @@ TRANSLATIONS = {
         'name': '简体中文', 'dir': 'ltr', 'recommend': '推荐尺寸', 'badge': '常用',
         'seo_title': '在线 ICO 图标生成器', 'seo_desc': '免费在线图片转 ICO 工具。支持透明背景。',
         'h1': 'ICO 图标生成器', 'subtitle': '一键生成透明背景图标', 'upload_label': '点击选择 或 拖拽图片', 'size_label': '目标尺寸', 'btn_submit': '生成并下载 .ICO', 'footer': '数据安全保护，不保存任何图片。', 'error_large': '文件过大 (最大 4MB)',
-        # 创意指引文案
+        'tab_create': '制作图标',
+        'tab_guide': '使用指南',
         'guide_what_title': '瞬间识别',
-        'guide_what_desc': '图标将显示在这里，让您的网页在标签海中脱颖而出。',
+        'guide_what_desc': '图标显示在浏览器标签页。',
         'guide_how_title': '极速集成',
         'guide_copy_btn': '复制',
         'guide_copied': '已复制!',
@@ -41,13 +43,16 @@ TRANSLATIONS = {
         'name': '繁體中文', 'dir': 'ltr', 'recommend': '推薦尺寸', 'badge': '常用',
         'seo_title': '線上 ICO 圖示產生器', 'seo_desc': '免費線上圖片轉 ICO 工具。',
         'h1': 'ICO 圖示產生器', 'subtitle': '一鍵生成透明背景圖示', 'upload_label': '點擊選擇 或 拖曳圖片', 'size_label': '目標尺寸', 'btn_submit': '產生並下載 .ICO', 'footer': '資料安全保護，不保存任何圖片。', 'error_large': '檔案過大 (最大 4MB)',
+        'tab_create': '製作圖示',
+        'tab_guide': '使用指南',
         'guide_what_title': '瞬間識別',
-        'guide_what_desc': '圖示將顯示在這裡，讓您的網頁在分頁海中脫穎而出。',
+        'guide_what_desc': '圖示顯示在瀏覽器分頁。',
         'guide_how_title': '極速整合',
         'guide_copy_btn': '複製',
         'guide_copied': '已複製!',
     },
 
+    # --- 其他语言 (合并 EN_GUIDE) ---
     'es': { **EN_GUIDE, 'name': 'Español', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT', 'seo_title': 'Convertidor ICO Online', 'seo_desc': 'Convierte imágenes a ICO.', 'h1': 'Convertidor ICO', 'subtitle': 'Generador de Favicon', 'upload_label': 'Clic para subir', 'size_label': 'Tamaño', 'btn_submit': 'Generar .ICO', 'footer': 'Privacidad protegida.', 'error_large': 'Archivo muy grande' },
     'fr': { **EN_GUIDE, 'name': 'Français', 'dir': 'ltr', 'recommend': 'Recommandé', 'badge': 'TOP', 'seo_title': 'Convertisseur ICO', 'seo_desc': 'Convertir en ICO.', 'h1': 'Convertisseur ICO', 'subtitle': 'Générateur de Favicon', 'upload_label': 'Uploader une image', 'size_label': 'Taille', 'btn_submit': 'Générer .ICO', 'footer': 'Confidentialité respectée.', 'error_large': 'Fichier trop volumineux' },
     'de': { **EN_GUIDE, 'name': 'Deutsch', 'dir': 'ltr', 'recommend': 'Empfohlen', 'badge': 'TOP', 'seo_title': 'ICO Konverter', 'seo_desc': 'In ICO umwandeln.', 'h1': 'ICO Konverter', 'subtitle': 'Favicon-Generator', 'upload_label': 'Bild hochladen', 'size_label': 'Größe', 'btn_submit': '.ICO Herunterladen', 'footer': 'Datenschutz.', 'error_large': 'Datei zu groß' },
