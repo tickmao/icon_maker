@@ -63,7 +63,7 @@
         }
       }
       .animate-fade-in {
-        animation: fade-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        animation: fade-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
 
       .scrollbar-hide::-webkit-scrollbar {
@@ -74,7 +74,7 @@
         scrollbar-width: none;
       }
 
-      /* FAQ 手风琴动画 (修复版：使用 max-height) */
+      /* FAQ 动画 */
       .faq-content {
         max-height: 0;
         overflow: hidden;
@@ -82,7 +82,7 @@
         opacity: 0;
       }
       .faq-open .faq-content {
-        max-height: 200px; /* 足够大的高度 */
+        max-height: 200px;
         opacity: 1;
       }
       .faq-icon {
@@ -130,7 +130,7 @@
     ></noscript>
 
     <div
-      class="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-2xl border-t-4 border-green-500 dark:border-green-600 z-10 flex flex-col h-[600px] transition-all duration-300 mb-8 mt-8"
+      class="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/50 border-t-4 border-green-500 dark:border-green-600 z-10 flex flex-col h-[600px] transition-all duration-300 mb-8 mt-8 ring-1 ring-gray-900/5 dark:ring-white/10"
     >
       <div class="px-6 pt-6 pb-0 flex items-center justify-between shrink-0 z-30">
         <div class="flex items-center gap-3">
@@ -152,19 +152,21 @@
             </button>
             <div
               id="lang-menu"
-              class="hidden absolute left-0 top-9 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-gray-100 dark:border-slate-600 overflow-hidden transform origin-top-left z-50"
+              class="hidden absolute left-0 top-9 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-xl border border-gray-100 dark:border-slate-600 overflow-hidden transform origin-top-left z-50"
             >
               <div class="grid grid-cols-2 gap-1 p-2 max-h-64 overflow-y-auto scrollbar-hide">
                 {% if alternates %} {% for alt in alternates %}
                 <a
                   href="{{ alt.href }}"
                   class="flex items-center px-3 py-2 text-xs rounded-lg transition-all {% if alt.lang == current_lang %} font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 {% else %} text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 {% endif %}"
-                  >{{ alt.name }}</a
                 >
+                  {{ alt.name }}
+                </a>
                 {% endfor %} {% endif %}
               </div>
             </div>
           </div>
+
           <div class="w-px h-4 bg-gray-300 dark:bg-slate-600 mx-1"></div>
           <button
             onclick="toggleTheme()"
@@ -200,6 +202,7 @@
             </svg>
           </button>
         </div>
+
         <div
           class="flex bg-gray-100/80 dark:bg-slate-900/50 p-1 rounded-lg backdrop-blur-sm border border-transparent dark:border-slate-700"
         >
@@ -244,6 +247,7 @@
               {{ t.subtitle }}
             </p>
           </div>
+
           <form
             action="/generate"
             method="POST"
@@ -309,6 +313,7 @@
                 onchange="handleFileSelect(this)"
               />
             </div>
+
             <div class="shrink-0 py-2">
               <label
                 class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 ml-1"
@@ -502,11 +507,11 @@
       <div class="space-y-3">
         {% for faq in t.faq_list %}
         <div
-          class="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-lg border border-gray-100 dark:border-slate-700 transition-all duration-200"
+          class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md border border-gray-100 dark:border-slate-700 hover:border-green-200 dark:hover:border-green-800 transition-all duration-200"
         >
           <button
             onclick="toggleFaq(this)"
-            class="w-full flex items-center justify-between p-4 text-left focus:outline-none group"
+            class="w-full flex items-center justify-between p-4 text-left focus:outline-none group cursor-pointer"
           >
             <span
               class="text-sm font-bold text-gray-700 dark:text-gray-200 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors"
@@ -528,7 +533,7 @@
           </button>
           <div class="faq-content">
             <div
-              class="p-4 pt-0 text-xs text-gray-500 dark:text-gray-400 leading-relaxed border-t border-gray-50 dark:border-slate-700/50 mt-2"
+              class="p-4 pt-0 text-xs text-gray-500 dark:text-gray-400 leading-relaxed opacity-90 min-h-0 border-t border-transparent"
             >
               {{ faq.a }}
             </div>
@@ -557,11 +562,11 @@
 
     <div
       id="share-modal"
-      class="fixed inset-0 z-[999] hidden items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity opacity-0"
+      class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity opacity-0"
       onclick="closeShareModal()"
     >
       <div
-        class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-sm transform scale-95 transition-all duration-200"
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-sm transform scale-95 transition-all duration-200 m-4"
         onclick="event.stopPropagation()"
       >
         <div class="flex justify-between items-center mb-6">
@@ -794,7 +799,7 @@
           }, 2000)
         })
       }
-      // Share Logic Fix
+      // Share Modal Logic
       const sm = document.getElementById('share-modal')
       function openShareModal() {
         sm.classList.remove('hidden')
