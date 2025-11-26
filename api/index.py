@@ -95,30 +95,3 @@ def sitemap():
         urls.append(f"<url><loc>{base_url}/{lang}</loc><changefreq>weekly</changefreq></url>")
     xml = f"""<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{''.join(urls)}</urlset>"""
     return Response(xml, mimetype="application/xml")
-
-# ==========================================
-# 3. 像素风 Favicon 生成器 (Creative Pixel Art)
-# ==========================================
-@app.route('/favicon.ico')
-def favicon():
-    # 画布 32x32
-    size = 32
-    img = Image.new('RGBA', (size, size), (0, 0, 0, 0))
-    draw = ImageDraw.Draw(img)
-
-    # 1. 绿色圆角背景 (#16a34a)
-    draw.rounded_rectangle([0, 0, 32, 32], radius=6, fill='#16a34a')
-
-    # 2. 绘制白色像素箭头 (Arrow Down)
-    # 箭头杆
-    draw.rectangle([13, 6, 19, 18], fill='white')
-    # 箭头头 (像素阶梯效果)
-    draw.rectangle([10, 18, 22, 20], fill='white') # 宽层
-    draw.rectangle([11, 20, 21, 22], fill='white') # 中层
-    draw.rectangle([13, 22, 19, 24], fill='white') # 窄层
-    draw.rectangle([15, 24, 17, 26], fill='white') # 尖端
-
-    img_io = io.BytesIO()
-    img.save(img_io, format='ICO', sizes=[(24, 24)])
-    img_io.seek(0)
-    return send_file(img_io, mimetype='image/x-icon')
