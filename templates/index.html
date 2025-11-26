@@ -31,13 +31,11 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <meta name="google-site-verification" content="6_nhemG03TE6dIX_maOP8kBlJeprycijzDh6IgGem6E" />
-
     <title>{{ t.seo_title }}</title>
     <meta name="description" content="{{ t.seo_desc }}" />
     <meta name="keywords" content="{{ t.keywords }}" />
     <link rel="canonical" href="{{ base_url }}/{{ current_lang }}" />
     <meta property="og:image" content="{{ base_url }}/favicon.ico" />
-
     <link rel="icon" href="/favicon.ico?v=8" type="image/x-icon" />
 
     {% for alt in alternates %}
@@ -46,24 +44,7 @@
     <link rel="alternate" hreflang="x-default" href="{{ alternates[0].href }}" />
 
     <script type="application/ld+json">
-      [
-        {
-          "@context": "https://schema.org",
-          "@type": "SoftwareApplication",
-          "name": "ICO Converter",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-          "description": "{{ t.seo_desc }}"
-        },
-        {
-          "@context": "https://schema.org",
-          "@type": "HowTo",
-          "name": "{{ t.h1 }}",
-          "step": [
-            { "@type": "HowToStep", "name": "{{ t.step1_title }}", "text": "{{ t.step1_desc }}" },
-            { "@type": "HowToStep", "name": "{{ t.step2_title }}", "text": "{{ t.step2_desc }}" }
-          ]
-        }
-      ]
+      [{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ICO Converter","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"description":"{{ t.seo_desc }}"},{"@context":"https://schema.org","@type":"HowTo","name":"{{ t.h1 }}","step":[{"@type":"HowToStep","name":"{{ t.step1_title }}","text":"{{ t.step1_desc }}"},{"@type":"HowToStep","name":"{{ t.step2_title }}","text":"{{ t.step2_desc }}"}]},{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for faq in t.faq_list %}{"@type":"Question","name":"{{ faq.q }}","acceptedAnswer":{"@type":"Answer","text":"{{ faq.a }}"}}{% if not loop.last %},{% endif %}{% endfor %}]}]
     </script>
 
     <script src="https://cdn.tailwindcss.com"></script>
@@ -85,26 +66,30 @@
         animation: fade-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
 
-      @keyframes pop-up {
-        0% {
-          opacity: 0;
-          transform: scale(0.9) translateY(10px);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1) translateY(0);
-        }
-      }
-      .animate-pop-up {
-        animation: pop-up 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-      }
-
       .scrollbar-hide::-webkit-scrollbar {
         display: none;
       }
       .scrollbar-hide {
         -ms-overflow-style: none;
         scrollbar-width: none;
+      }
+
+      /* FAQ 手风琴动画 (修复版：使用 max-height) */
+      .faq-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
+        opacity: 0;
+      }
+      .faq-open .faq-content {
+        max-height: 200px; /* 足够大的高度 */
+        opacity: 1;
+      }
+      .faq-icon {
+        transition: transform 0.3s ease;
+      }
+      .faq-open .faq-icon {
+        transform: rotate(180deg);
       }
 
       .drag-active {
@@ -115,7 +100,6 @@
       .dark .drag-active {
         background-color: rgba(34, 197, 94, 0.2) !important;
       }
-
       html[dir='rtl'] body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
@@ -134,7 +118,7 @@
   </head>
   <body
     class="aurora-bg min-h-screen flex flex-col items-center justify-center p-4 font-sans text-gray-700 dark:text-gray-200 overflow-y-auto transition-colors duration-300"
-    onclick="closeMenus(event)"
+    onclick="closeLangMenu(event)"
   >
     <noscript
       ><iframe
@@ -175,14 +159,12 @@
                 <a
                   href="{{ alt.href }}"
                   class="flex items-center px-3 py-2 text-xs rounded-lg transition-all {% if alt.lang == current_lang %} font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 {% else %} text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 {% endif %}"
+                  >{{ alt.name }}</a
                 >
-                  {{ alt.name }}
-                </a>
                 {% endfor %} {% endif %}
               </div>
             </div>
           </div>
-
           <div class="w-px h-4 bg-gray-300 dark:bg-slate-600 mx-1"></div>
           <button
             onclick="toggleTheme()"
@@ -218,7 +200,6 @@
             </svg>
           </button>
         </div>
-
         <div
           class="flex bg-gray-100/80 dark:bg-slate-900/50 p-1 rounded-lg backdrop-blur-sm border border-transparent dark:border-slate-700"
         >
@@ -263,7 +244,6 @@
               {{ t.subtitle }}
             </p>
           </div>
-
           <form
             action="/generate"
             method="POST"
@@ -329,7 +309,6 @@
                 onchange="handleFileSelect(this)"
               />
             </div>
-
             <div class="shrink-0 py-2">
               <label
                 class="block text-[10px] font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2 ml-1"
@@ -520,10 +499,10 @@
       <h2 class="text-lg font-bold text-gray-800 dark:text-white mb-4 text-center opacity-90">
         {{ t.faq_title }}
       </h2>
-      <div class="space-y-2">
+      <div class="space-y-3">
         {% for faq in t.faq_list %}
         <div
-          class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-100 dark:border-slate-700 hover:border-green-200 dark:hover:border-green-800 transition-colors"
+          class="bg-white dark:bg-slate-800 rounded-xl shadow-md hover:shadow-lg border border-gray-100 dark:border-slate-700 transition-all duration-200"
         >
           <button
             onclick="toggleFaq(this)"
@@ -547,9 +526,9 @@
               ></path>
             </svg>
           </button>
-          <div class="faq-answer overflow-hidden">
+          <div class="faq-content">
             <div
-              class="p-4 pt-0 text-xs text-gray-500 dark:text-gray-400 leading-relaxed opacity-90 min-h-0"
+              class="p-4 pt-0 text-xs text-gray-500 dark:text-gray-400 leading-relaxed border-t border-gray-50 dark:border-slate-700/50 mt-2"
             >
               {{ faq.a }}
             </div>
@@ -578,14 +557,14 @@
 
     <div
       id="share-modal"
-      class="fixed inset-0 z-50 hidden items-center justify-center bg-black/50 backdrop-blur-sm transition-opacity opacity-0"
-      onclick="closeShareModal(event)"
+      class="fixed inset-0 z-[999] hidden items-center justify-center bg-black/40 backdrop-blur-sm transition-opacity opacity-0"
+      onclick="closeShareModal()"
     >
       <div
-        class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-sm transform scale-90 transition-transform duration-200"
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-sm transform scale-95 transition-all duration-200"
         onclick="event.stopPropagation()"
       >
-        <div class="flex justify-between items-center mb-4">
+        <div class="flex justify-between items-center mb-6">
           <h3 class="text-lg font-bold text-gray-800 dark:text-white">{{ t.share_modal_title }}</h3>
           <button
             onclick="closeShareModal()"
@@ -606,8 +585,7 @@
             href="https://twitter.com/intent/tweet?text={{ t.share_msg }}&url={{ request.url }}"
             target="_blank"
             class="flex flex-col items-center gap-2 group"
-          >
-            <div
+            ><div
               class="w-12 h-12 bg-black text-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -616,14 +594,13 @@
                 />
               </svg>
             </div>
-            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">X</span>
-          </a>
+            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">X</span></a
+          >
           <a
             href="https://www.facebook.com/sharer/sharer.php?u={{ request.url }}"
             target="_blank"
             class="flex flex-col items-center gap-2 group"
-          >
-            <div
+            ><div
               class="w-12 h-12 bg-[#1877F2] text-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
             >
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -632,14 +609,15 @@
                 />
               </svg>
             </div>
-            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">Facebook</span>
-          </a>
+            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium"
+              >Facebook</span
+            ></a
+          >
           <a
             href="https://api.whatsapp.com/send?text={{ t.share_msg }} {{ request.url }}"
             target="_blank"
             class="flex flex-col items-center gap-2 group"
-          >
-            <div
+            ><div
               class="w-12 h-12 bg-[#25D366] text-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
             >
               <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -648,14 +626,15 @@
                 />
               </svg>
             </div>
-            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">WhatsApp</span>
-          </a>
+            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium"
+              >WhatsApp</span
+            ></a
+          >
           <a
             href="https://www.linkedin.com/shareArticle?mini=true&url={{ request.url }}"
             target="_blank"
             class="flex flex-col items-center gap-2 group"
-          >
-            <div
+            ><div
               class="w-12 h-12 bg-[#0077b5] text-white rounded-full flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform"
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -664,15 +643,17 @@
                 />
               </svg>
             </div>
-            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium">LinkedIn</span>
-          </a>
+            <span class="text-[10px] text-gray-500 dark:text-gray-400 font-medium"
+              >LinkedIn</span
+            ></a
+          >
         </div>
         <div class="relative">
           <input
             type="text"
             value="{{ request.url }}"
             readonly
-            class="w-full bg-gray-100 dark:bg-slate-700 border-none rounded-lg py-3 px-4 text-sm text-gray-600 dark:text-gray-300 focus:ring-0"
+            class="w-full bg-gray-100 dark:bg-slate-700 border-none rounded-lg py-3 px-4 text-sm text-gray-600 dark:text-gray-300 focus:ring-0 shadow-inner"
           />
           <button
             onclick="copyShareLink(this)"
@@ -693,11 +674,9 @@
     </footer>
 
     <script>
-      // Toggle FAQ
       function toggleFaq(btn) {
         btn.parentElement.classList.toggle('faq-open')
       }
-      // Dark Mode
       function toggleTheme() {
         if (document.documentElement.classList.contains('dark')) {
           document.documentElement.classList.remove('dark')
@@ -707,7 +686,6 @@
           localStorage.theme = 'dark'
         }
       }
-      // Tabs
       function switchTab(tab) {
         const c = document.getElementById('view-create'),
           g = document.getElementById('view-guide'),
@@ -753,7 +731,6 @@
           bc.classList.add(...i)
         }
       }
-      // Lang Menu
       function toggleLangMenu(e) {
         e.stopPropagation()
         document.getElementById('lang-menu').classList.toggle('hidden')
@@ -764,7 +741,6 @@
         if (!m.classList.contains('hidden') && !m.contains(e.target) && !b.contains(e.target))
           m.classList.add('hidden')
       }
-      // File Handle
       function handleFileSelect(i) {
         if (i.files && i.files[0]) {
           const f = i.files[0]
@@ -784,7 +760,6 @@
           document.getElementById('file-label').innerText = f.name
         }
       }
-      // Drag Drop
       const dz = document.getElementById('upload-zone')
       ;['dragenter', 'dragover'].forEach((e) =>
         dz.addEventListener(
@@ -808,7 +783,6 @@
           false
         )
       )
-      // Copy Code
       function copyCode(b) {
         navigator.clipboard.writeText('<link rel="icon" href="favicon.ico" />').then(() => {
           const o = b.innerHTML
@@ -820,20 +794,24 @@
           }, 2000)
         })
       }
-      // Share Modal
+      // Share Logic Fix
       const sm = document.getElementById('share-modal')
       function openShareModal() {
         sm.classList.remove('hidden')
+        sm.classList.add('flex')
         setTimeout(() => {
           sm.classList.remove('opacity-0')
-          sm.children[0].classList.remove('scale-90')
+          sm.children[0].classList.remove('scale-95')
+          sm.children[0].classList.add('scale-100')
         }, 10)
       }
       function closeShareModal() {
         sm.classList.add('opacity-0')
-        sm.children[0].classList.add('scale-90')
+        sm.children[0].classList.remove('scale-100')
+        sm.children[0].classList.add('scale-95')
         setTimeout(() => {
           sm.classList.add('hidden')
+          sm.classList.remove('flex')
         }, 200)
       }
       function copyShareLink(b) {
@@ -847,7 +825,6 @@
           }, 2000)
         })
       }
-      // Submit
       document.querySelector('form').onsubmit = async function (e) {
         e.preventDefault()
         const f = e.target,
