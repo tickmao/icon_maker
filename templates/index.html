@@ -78,7 +78,7 @@
       .faq-content {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease;
+        transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
         opacity: 0;
       }
       .faq-open .faq-content {
@@ -86,16 +86,15 @@
         opacity: 1;
       }
       .faq-icon {
-        transition: transform 0.4s ease;
+        transition: transform 0.3s ease;
       }
       .faq-open .faq-icon {
         transform: rotate(180deg);
       }
 
-      /* 拖拽高亮 */
       .drag-active {
         border-color: #22c55e !important;
-        background-color: rgba(34, 197, 94, 0.08) !important;
+        background-color: rgba(34, 197, 94, 0.05) !important;
         transform: scale(1.01);
       }
       .dark .drag-active {
@@ -105,19 +104,19 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
 
-      /* 统一的极光背景体系 */
+      /* 极光背景 */
       .aurora-bg {
-        background-color: #f0fdf4; /* 非常淡的绿色背景 */
-        background-image: radial-gradient(at 0% 0%, rgba(134, 239, 172, 0.4) 0px, transparent 50%),
-          radial-gradient(at 100% 100%, rgba(74, 222, 128, 0.2) 0px, transparent 50%);
+        background-color: #f8fafc;
+        background-image: radial-gradient(at 0% 0%, rgba(187, 247, 208, 0.4) 0px, transparent 50%),
+          radial-gradient(at 100% 100%, rgba(187, 247, 208, 0.3) 0px, transparent 50%);
       }
       .dark .aurora-bg {
-        background-color: #0f172a; /* Slate-900 */
+        background-color: #020617;
         background-image: radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.15) 0px, transparent 50%),
-          radial-gradient(at 100% 100%, rgba(21, 128, 61, 0.1) 0px, transparent 50%);
+          radial-gradient(at 100% 100%, rgba(22, 163, 74, 0.1) 0px, transparent 50%);
       }
 
-      /* 玻璃态卡片统一类 */
+      /* 玻璃态卡片 */
       .glass-card {
         background: rgba(255, 255, 255, 0.85);
         backdrop-filter: blur(12px);
@@ -125,7 +124,7 @@
         border: 1px solid rgba(255, 255, 255, 0.6);
       }
       .dark .glass-card {
-        background: rgba(30, 41, 59, 0.7); /* Slate-800 alpha */
+        background: rgba(30, 41, 59, 0.7);
         border: 1px solid rgba(255, 255, 255, 0.08);
         box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
       }
@@ -145,7 +144,7 @@
     ></noscript>
 
     <div
-      class="glass-card relative w-full max-w-md rounded-2xl shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] dark:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] z-10 flex flex-col h-[600px] transition-all duration-500 mb-8 mt-8 border-t-4 border-t-green-500 dark:border-t-green-500"
+      class="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] z-10 flex flex-col h-[600px] transition-all duration-300 mb-8 mt-8 border-t-4 border-green-500 dark:border-green-500 border-x border-b border-gray-100 dark:border-none dark:ring-1 dark:ring-white/10"
     >
       <div class="px-6 pt-6 pb-0 flex items-center justify-between shrink-0 z-30">
         <div class="flex items-center gap-3">
@@ -158,7 +157,7 @@
                 onclick="toggleLangMenu(event)"
                 class="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-white dark:hover:bg-slate-800 hover:text-green-600 dark:hover:text-green-400 transition-all duration-300 focus:outline-none"
               >
-                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -166,7 +165,7 @@
                     d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-                <span class="mt-0.5">{{ current_lang }}</span>
+                <span class="leading-none">{{ current_lang }}</span>
               </button>
               <div
                 id="lang-menu"
@@ -226,19 +225,19 @@
         </div>
 
         <div
-          class="flex bg-gray-100/80 dark:bg-slate-900/50 p-1 rounded-lg backdrop-blur-sm border border-gray-200/50 dark:border-slate-700/50 transition-colors duration-500"
+          class="flex bg-gray-100/60 dark:bg-slate-900/50 p-1 rounded-lg backdrop-blur-sm border border-gray-200/50 dark:border-slate-700/50 transition-colors duration-500"
         >
           <button
             onclick="switchTab('create')"
             id="btn-create"
-            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 shadow-sm bg-white dark:bg-slate-700 text-gray-800 dark:text-white scale-100"
+            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 shadow-sm bg-white dark:bg-slate-700 text-slate-800 dark:text-white scale-100 border border-gray-100 dark:border-slate-600"
           >
             {{ t.tab_create }}
           </button>
           <button
             onclick="switchTab('guide')"
             id="btn-guide"
-            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-white/50 dark:hover:bg-slate-800/50"
+            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 text-slate-400 dark:text-slate-500 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-white/50 dark:hover:bg-slate-800/50 border border-transparent"
           >
             {{ t.tab_guide }}
           </button>
@@ -668,7 +667,7 @@
             >
               <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                 <path
-                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
+                  d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"
                 />
               </svg>
             </div>
