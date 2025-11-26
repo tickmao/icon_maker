@@ -1,6 +1,8 @@
 import io
 import os
-from flask import Flask, render_template, request, send_file, Response, redirect
+
+from flask import (Flask, Response, redirect, render_template, request,
+                   send_file)
 from PIL import Image, ImageDraw
 
 app = Flask(__name__, template_folder='../templates')
@@ -117,6 +119,6 @@ def favicon():
     draw.rectangle([15, 24, 17, 26], fill='white') # 尖端
 
     img_io = io.BytesIO()
-    img.save(img_io, format='ICO', sizes=[(32, 32)])
+    img.save(img_io, format='ICO', sizes=[(24, 24)])
     img_io.seek(0)
     return send_file(img_io, mimetype='image/x-icon')
