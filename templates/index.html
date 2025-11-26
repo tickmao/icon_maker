@@ -30,7 +30,6 @@
       .animate-fade-in {
         animation: fade-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
-
       .lang-scroll::-webkit-scrollbar {
         width: 4px;
       }
@@ -44,7 +43,6 @@
       .lang-scroll::-webkit-scrollbar-thumb:hover {
         background: #d1d5db;
       }
-
       html[dir='rtl'] body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
@@ -247,102 +245,67 @@
 
         <div
           id="view-guide"
-          class="hidden flex-col h-full p-8 pt-0 animate-fade-in justify-center overflow-y-auto scrollbar-hide"
+          class="hidden flex-col h-full p-6 animate-fade-in justify-between overflow-hidden"
         >
-          <div class="w-full space-y-6">
-            <div class="bg-gray-50 rounded-xl p-5 border border-gray-100">
-              <div class="flex items-center gap-2 mb-3">
-                <span
-                  class="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-0.5 rounded-md"
-                  >STEP 1</span
-                >
-                <h3 class="text-xs font-bold text-gray-700">{{ t.step1_title }}</h3>
-              </div>
-              <div
-                class="bg-white rounded-lg border border-gray-200 p-4 font-mono text-[11px] text-gray-500 leading-loose shadow-sm select-none"
-              >
-                <div class="flex items-center gap-2 text-gray-800 font-bold">
-                  <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                    ></path>
-                  </svg>
-                  / (Root Folder)
-                </div>
-                <div class="flex items-center gap-2 pl-6 border-l border-gray-100 ml-2">
-                  <svg
-                    class="w-3.5 h-3.5 text-gray-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                    ></path>
-                  </svg>
-                  index.html
-                </div>
-                <div class="flex items-center gap-2 pl-6 border-l border-gray-100 ml-2">
-                  <svg
-                    class="w-3.5 h-3.5 text-gray-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"
-                    ></path>
-                  </svg>
-                  style.css
-                </div>
-                <div
-                  class="flex items-center gap-2 pl-6 border-l border-gray-100 ml-2 bg-green-50 -mx-2 px-2 rounded text-green-700 font-bold"
-                >
-                  <svg class="w-3.5 h-3.5 text-green-500" fill="currentColor" viewBox="0 0 20 20">
-                    <path
-                      fill-rule="evenodd"
-                      d="M4 4a2 2 0 012-2h4.586A2 2 0 0112 2.586L15.414 6A2 2 0 0116 7.414V16a2 2 0 01-2 2H6a2 2 0 01-2-2V4z"
-                      clip-rule="evenodd"
-                    ></path>
-                  </svg>
-                  favicon.ico
-                </div>
-              </div>
-              <p class="text-[10px] text-gray-400 mt-2 ml-1">{{ t.step1_desc }}</p>
+          <div
+            class="w-full bg-gray-100 rounded-t-xl rounded-b-lg p-4 pb-2 border border-gray-200/80 relative overflow-hidden"
+          >
+            <div
+              class="absolute top-0 left-0 w-full h-6 bg-gray-200/80 flex items-center px-2 gap-1.5"
+            >
+              <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+              <div class="w-2 h-2 rounded-full bg-gray-300"></div>
             </div>
+            <div
+              class="mt-4 bg-white rounded-t-lg shadow-sm border-t border-x border-gray-200 mx-auto max-w-[200px] p-2 flex items-center gap-2 relative z-10"
+            >
+              <img src="/favicon.ico?v=7" class="w-3.5 h-3.5 animate-pulse" />
+              <div class="h-1.5 w-16 bg-gray-200 rounded-full"></div>
+            </div>
+            <div class="bg-white h-4 w-full -mt-1 relative z-0"></div>
+            <div class="text-center mt-2">
+              <p class="text-[10px] text-gray-400 font-medium">{{ t.guide_preview_desc }}</p>
+            </div>
+          </div>
 
-            <div class="bg-white rounded-xl p-5 border border-gray-100 shadow-sm">
-              <div class="flex items-center gap-2 mb-3">
-                <span class="bg-gray-800 text-white text-[10px] font-bold px-2 py-0.5 rounded-md"
-                  >STEP 2</span
-                >
-                <h3 class="text-xs font-bold text-gray-700">{{ t.step2_title }}</h3>
-              </div>
-              <div class="bg-[#1e293b] rounded-lg p-4 relative group shadow-inner overflow-hidden">
-                <div class="absolute top-0 left-0 w-1 h-full bg-green-500"></div>
-                <code class="font-mono text-[11px] text-slate-300 block leading-relaxed">
-                  <span class="text-slate-500">&lt;head&gt;</span><br />
-                  &nbsp;&nbsp;&lt;link rel="icon"<br />
-                  &nbsp;&nbsp;&nbsp;&nbsp;href="<span class="text-green-400 font-bold"
-                    >favicon.ico</span
-                  >" /&gt;<br />
-                  <span class="text-slate-500">&lt;/head&gt;</span>
-                </code>
-                <button
-                  onclick="copyCode(this)"
-                  class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] px-2.5 py-1 rounded transition-all backdrop-blur-md border border-white/5 font-medium flex items-center gap-1"
-                >
-                  <span>{{ t.guide_copy_btn }}</span>
-                </button>
-              </div>
-              <p class="text-[10px] text-gray-400 mt-2 ml-1">{{ t.step2_desc }}</p>
+          <div
+            class="bg-white border border-gray-100 rounded-xl p-3 flex items-center gap-4 shadow-sm"
+          >
+            <div
+              class="bg-green-50 text-green-700 rounded-lg w-10 h-10 flex items-center justify-center shrink-0 font-bold text-sm"
+            >
+              1
             </div>
+            <div class="flex-1 min-w-0">
+              <h3 class="text-xs font-bold text-gray-700">{{ t.step1_title }}</h3>
+              <div
+                class="flex items-center gap-1 text-[10px] text-gray-400 font-mono mt-0.5 overflow-hidden whitespace-nowrap"
+              >
+                <span>/root/</span>
+                <span class="text-green-600 font-bold bg-green-50 px-1 rounded">favicon.ico</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="bg-[#1e293b] rounded-xl p-4 shadow-lg relative group">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center gap-2">
+                <span class="bg-gray-700 text-white text-[9px] px-1.5 py-0.5 rounded">STEP 2</span>
+                <span class="text-[10px] font-bold text-gray-400">{{ t.step2_title }}</span>
+              </div>
+              <button
+                onclick="copyCode(this)"
+                class="text-white/70 hover:text-white text-[10px] flex items-center gap-1 bg-white/10 px-2 py-1 rounded transition-colors"
+              >
+                {{ t.guide_copy_btn }}
+              </button>
+            </div>
+            <code class="font-mono text-[10px] text-slate-300 block leading-relaxed">
+              &lt;head&gt;<br />
+              &nbsp;&nbsp;&lt;link rel="icon" href="<span class="text-green-400">favicon.ico</span>"
+              /&gt;<br />
+              &lt;/head&gt;
+            </code>
           </div>
         </div>
       </div>
@@ -425,11 +388,11 @@
         const code = '<link rel="icon" href="favicon.ico" />'
         navigator.clipboard.writeText(code).then(() => {
           const originalHTML = btn.innerHTML
-          btn.innerHTML = '<span class="text-green-400">{{ t.guide_copied }}</span>'
-          btn.classList.add('bg-white/20')
+          btn.innerText = '{{ t.guide_copied }}'
+          btn.classList.add('text-green-400')
           setTimeout(() => {
             btn.innerHTML = originalHTML
-            btn.classList.remove('bg-white/20')
+            btn.classList.remove('text-green-400')
           }, 2000)
         })
       }

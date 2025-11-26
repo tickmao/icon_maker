@@ -6,20 +6,22 @@ from flask import (Flask, Response, redirect, render_template, request,
 from PIL import Image
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_step_v1')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_complete')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 终极全球语言包 (步骤化指引)
+# 1. 终极全球语言包
 # ==========================================
 EN_GUIDE = {
     'tab_create': 'Create',
     'tab_guide': 'Guide',
+    'guide_preview_title': 'Browser Tab Preview', # 新增：预览标题
+    'guide_preview_desc': 'Favicon helps users identify your site.', # 新增：预览描述
     'step1_title': '1. Place File',
-    'step1_desc': 'Move the downloaded file to your website root folder.',
+    'step1_desc': 'Root directory',
     'step2_title': '2. Insert Code',
-    'step2_desc': 'Paste this code between the <head> tags.',
+    'step2_desc': 'Inside <head> tags',
     'guide_copy_btn': 'Copy',
     'guide_copied': 'Copied!',
 }
@@ -33,10 +35,12 @@ TRANSLATIONS = {
         'h1': 'ICO 图标生成器', 'subtitle': '一键生成透明背景图标', 'upload_label': '点击选择 或 拖拽图片', 'size_label': '目标尺寸', 'btn_submit': '生成并下载 .ICO', 'footer': '数据安全保护，不保存任何图片。', 'error_large': '文件过大 (最大 4MB)',
         'tab_create': '制作图标',
         'tab_guide': '使用指南',
+        'guide_preview_title': '效果演示',
+        'guide_preview_desc': '图标将显示在浏览器标签页，提升辨识度。',
         'step1_title': '1. 放置文件',
-        'step1_desc': '下载后，将 favicon.ico 放在网站的根目录下。',
+        'step1_desc': '放在网站根目录',
         'step2_title': '2. 引入代码',
-        'step2_desc': '在页面源文件的 <head> 标签之间插入代码。',
+        'step2_desc': '插入 <head> 标签中',
         'guide_copy_btn': '复制',
         'guide_copied': '已复制!',
     },
@@ -47,10 +51,12 @@ TRANSLATIONS = {
         'h1': 'ICO 圖示產生器', 'subtitle': '一鍵生成透明背景圖示', 'upload_label': '點擊選擇 或 拖曳圖片', 'size_label': '目標尺寸', 'btn_submit': '產生並下載 .ICO', 'footer': '資料安全保護，不保存任何圖片。', 'error_large': '檔案過大 (最大 4MB)',
         'tab_create': '製作圖示',
         'tab_guide': '使用指南',
+        'guide_preview_title': '效果演示',
+        'guide_preview_desc': '圖示將顯示在瀏覽器分頁，提升辨識度。',
         'step1_title': '1. 放置檔案',
-        'step1_desc': '下載後，將 favicon.ico 放在網站的根目錄下。',
+        'step1_desc': '放在網站根目錄',
         'step2_title': '2. 引入程式碼',
-        'step2_desc': '在頁面原始檔的 <head> 標籤之間插入程式碼。',
+        'step2_desc': '插入 <head> 標籤中',
         'guide_copy_btn': '複製',
         'guide_copied': '已複製!',
     },
@@ -135,7 +141,7 @@ def sitemap():
     xml = f"""<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{''.join(urls)}</urlset>"""
     return Response(xml, mimetype="application/xml")
 
-# 读取本地 favicon.ico
 @app.route('/favicon.ico')
 def favicon():
+    # 读取本地文件，确保使用你制作的图标
     return send_file('../favicon.ico', mimetype='image/vnd.microsoft.icon')
