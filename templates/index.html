@@ -1,11 +1,25 @@
 <!DOCTYPE html>
 <html lang="{{ current_lang }}" dir="{{ t.dir }}">
   <head>
+    <script>
+      ;(function (w, d, s, l, i) {
+        w[l] = w[l] || []
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' })
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : ''
+        j.async = true
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl
+        f.parentNode.insertBefore(j, f)
+      })(window, document, 'script', 'dataLayer', 'GTM-5QZNGZXJ')
+    </script>
     <meta charset="UTF-8" />
     <meta
       name="viewport"
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
+
+    <meta name="google-site-verification" content="6_nhemG03TE6dIX_maOP8kBlJeprycijzDh6IgGem6E" />
 
     <title>{{ t.seo_title }}</title>
     <meta name="description" content="{{ t.seo_desc }}" />
@@ -102,6 +116,14 @@
     class="bg-gray-50 min-h-screen flex flex-col items-center justify-center p-4 font-sans text-gray-700 overflow-hidden"
     onclick="closeLangMenu(event)"
   >
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-5QZNGZXJ"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
     <div
       class="relative bg-white w-full max-w-md rounded-2xl shadow-2xl border-t-4 border-green-500 z-10 flex flex-col h-[600px] transition-all duration-300"
     >
