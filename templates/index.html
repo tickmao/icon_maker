@@ -115,19 +115,6 @@
         background-image: radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.15) 0px, transparent 50%),
           radial-gradient(at 100% 100%, rgba(22, 163, 74, 0.1) 0px, transparent 50%);
       }
-
-      /* 玻璃态卡片 */
-      .glass-card {
-        background: rgba(255, 255, 255, 0.85);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-      }
-      .dark .glass-card {
-        background: rgba(30, 41, 59, 0.7);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
-      }
     </style>
   </head>
   <body
@@ -144,12 +131,12 @@
     ></noscript>
 
     <div
-      class="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:shadow-[0_8px_40px_-12px_rgba(0,0,0,0.5)] z-10 flex flex-col h-[600px] transition-all duration-300 mb-8 mt-8 border-t-4 border-green-500 dark:border-green-500 border-x border-b border-gray-100 dark:border-none dark:ring-1 dark:ring-white/10"
+      class="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl z-10 flex flex-col h-[600px] transition-all duration-300 mb-8 mt-8 border-t-4 border-green-500 border-x border-b border-gray-100 dark:border-slate-700 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.05)] dark:shadow-[0_20px_50px_-12px_rgba(0,0,0,0.5)] dark:shadow-green-900/5"
     >
       <div class="px-6 pt-6 pb-0 flex items-center justify-between shrink-0 z-30">
         <div class="flex items-center gap-3">
           <div
-            class="flex items-center bg-gray-100/50 dark:bg-slate-900/50 border border-gray-200/50 dark:border-slate-700/50 rounded-lg p-1 transition-colors duration-500"
+            class="flex items-center bg-gray-100/50 dark:bg-slate-900/50 border border-gray-200/50 dark:border-slate-700 rounded-lg p-1 transition-colors duration-500"
           >
             <div class="relative">
               <button
@@ -157,7 +144,7 @@
                 onclick="toggleLangMenu(event)"
                 class="flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-bold text-gray-500 dark:text-gray-400 hover:bg-white dark:hover:bg-slate-800 hover:text-green-600 dark:hover:text-green-400 transition-all duration-300 focus:outline-none"
               >
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
                     stroke-linejoin="round"
@@ -165,7 +152,9 @@
                     d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-                <span class="leading-none">{{ current_lang }}</span>
+                <span class="uppercase tracking-wider leading-none mt-[1px]"
+                  >{{ current_lang }}</span
+                >
               </button>
               <div
                 id="lang-menu"
