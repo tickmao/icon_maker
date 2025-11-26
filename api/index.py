@@ -5,39 +5,68 @@ from flask import (Flask, Response, redirect, render_template, request,
                    send_file)
 from PIL import Image
 
-# 注意：删除了 ImageDraw，因为不需要画图了
-
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_static_v1')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_creative')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
 # 1. 终极全球语言包
 # ==========================================
+# 通用英文指引
+EN_GUIDE = {
+    'guide_what_title': 'Instant Recognition',
+    'guide_what_desc': 'Your icon lives here. It makes your tab stand out.',
+    'guide_how_title': 'Easy Integration',
+    'guide_copy_btn': 'Copy',
+    'guide_copied': 'Copied!',
+}
+
 TRANSLATIONS = {
-    'en': { 'name': 'English', 'dir': 'ltr', 'recommend': 'Recommended', 'badge': 'HOT', 'seo_title': 'Free Online ICO Converter', 'seo_desc': 'Convert PNG/JPG to ICO. Professional tool.', 'h1': 'ICO Converter', 'subtitle': 'Professional Favicon Generator', 'upload_label': 'Click to upload or Drag image', 'size_label': 'Target Size', 'btn_submit': 'Generate ICO', 'footer': 'Securely processed. Privacy protected.', 'error_large': 'File too large (Max 4MB)' },
-    'zh': { 'name': '简体中文', 'dir': 'ltr', 'recommend': '推荐尺寸', 'badge': '常用', 'seo_title': '在线 ICO 图标生成器', 'seo_desc': '免费在线图片转 ICO 工具。支持透明背景。', 'h1': 'ICO 图标生成器', 'subtitle': '一键生成透明背景图标', 'upload_label': '点击选择 或 拖拽图片', 'size_label': '目标尺寸', 'btn_submit': '生成并下载 .ICO', 'footer': '数据安全保护，不保存任何图片。', 'error_large': '文件过大 (最大 4MB)' },
-    'tw': { 'name': '繁體中文', 'dir': 'ltr', 'recommend': '推薦尺寸', 'badge': '常用', 'seo_title': '線上 ICO 圖示產生器', 'seo_desc': '免費線上圖片轉 ICO 工具。', 'h1': 'ICO 圖示產生器', 'subtitle': '一鍵生成透明背景圖示', 'upload_label': '點擊選擇 或 拖曳圖片', 'size_label': '目標尺寸', 'btn_submit': '產生並下載 .ICO', 'footer': '資料安全保護，不保存任何圖片。', 'error_large': '檔案過大 (最大 4MB)' },
-    'es': { 'name': 'Español', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT', 'seo_title': 'Convertidor ICO Online', 'seo_desc': 'Convierte imágenes a ICO.', 'h1': 'Convertidor ICO', 'subtitle': 'Generador de Favicon', 'upload_label': 'Clic para subir', 'size_label': 'Tamaño', 'btn_submit': 'Generar .ICO', 'footer': 'Privacidad protegida.', 'error_large': 'Archivo muy grande' },
-    'fr': { 'name': 'Français', 'dir': 'ltr', 'recommend': 'Recommandé', 'badge': 'TOP', 'seo_title': 'Convertisseur ICO', 'seo_desc': 'Convertir en ICO.', 'h1': 'Convertisseur ICO', 'subtitle': 'Générateur de Favicon', 'upload_label': 'Uploader une image', 'size_label': 'Taille', 'btn_submit': 'Générer .ICO', 'footer': 'Confidentialité respectée.', 'error_large': 'Fichier trop volumineux' },
-    'de': { 'name': 'Deutsch', 'dir': 'ltr', 'recommend': 'Empfohlen', 'badge': 'TOP', 'seo_title': 'ICO Konverter', 'seo_desc': 'In ICO umwandeln.', 'h1': 'ICO Konverter', 'subtitle': 'Favicon-Generator', 'upload_label': 'Bild hochladen', 'size_label': 'Größe', 'btn_submit': '.ICO Herunterladen', 'footer': 'Datenschutz.', 'error_large': 'Datei zu groß' },
-    'it': { 'name': 'Italiano', 'dir': 'ltr', 'recommend': 'Consigliato', 'badge': 'TOP', 'seo_title': 'Convertitore ICO', 'seo_desc': 'Converti in ICO.', 'h1': 'Convertitore ICO', 'subtitle': 'Generatore di Favicon', 'upload_label': 'Clicca per caricare', 'size_label': 'Dimensione', 'btn_submit': 'Scarica .ICO', 'footer': 'Privacy protetta.', 'error_large': 'File troppo grande' },
-    'pt': { 'name': 'Português', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT', 'seo_title': 'Conversor ICO', 'seo_desc': 'Converta para ICO.', 'h1': 'Conversor de ICO', 'subtitle': 'Gerador de Favicon', 'upload_label': 'Clique para subir', 'size_label': 'Tamanho', 'btn_submit': 'Baixar .ICO', 'footer': 'Privacidade protegida.', 'error_large': 'Arquivo muito grande' },
-    'ru': { 'name': 'Русский', 'dir': 'ltr', 'recommend': 'Стандарт', 'badge': 'ХИТ', 'seo_title': 'Конвертер ICO', 'seo_desc': 'Конвертировать в ICO.', 'h1': 'Конвертер ICO', 'subtitle': 'Генератор иконок', 'upload_label': 'Загрузить файл', 'size_label': 'Размер', 'btn_submit': 'Скачать .ICO', 'footer': 'Конфиденциальность.', 'error_large': 'Файл слишком большой' },
-    'nl': { 'name': 'Nederlands', 'dir': 'ltr', 'recommend': 'Aanbevolen', 'badge': 'TOP', 'seo_title': 'ICO Converter', 'seo_desc': 'Naar ICO converteren.', 'h1': 'ICO Converter', 'subtitle': 'Favicon Generator', 'upload_label': 'Klik om te uploaden', 'size_label': 'Grootte', 'btn_submit': 'Downloaden', 'footer': 'Privacy beschermd.', 'error_large': 'Bestand te groot' },
-    'pl': { 'name': 'Polski', 'dir': 'ltr', 'recommend': 'Zalecane', 'badge': 'HIT', 'seo_title': 'Konwerter ICO', 'seo_desc': 'Konwertuj na ICO.', 'h1': 'Konwerter ICO', 'subtitle': 'Generator Favicon', 'upload_label': 'Prześlij plik', 'size_label': 'Rozmiar', 'btn_submit': 'Pobierz .ICO', 'footer': 'Ochrona prywatności.', 'error_large': 'Plik zbyt duży' },
-    'ja': { 'name': '日本語', 'dir': 'ltr', 'recommend': '推奨サイズ', 'badge': '人気', 'seo_title': 'ICO変換ツール', 'seo_desc': 'ICO形式に変換。', 'h1': 'ICO 変換ツール', 'subtitle': 'プロフェッショナルなアイコン作成', 'upload_label': 'アップロード', 'size_label': 'サイズ', 'btn_submit': 'ダウンロード', 'footer': 'プライバシー保護。', 'error_large': 'ファイルサイズ過大' },
-    'ko': { 'name': '한국어', 'dir': 'ltr', 'recommend': '추천 크기', 'badge': '인기', 'seo_title': 'ICO 변환기', 'seo_desc': 'ICO 변환 도구.', 'h1': 'ICO 변환기', 'subtitle': '전문 파비콘 생성 도구', 'upload_label': '업로드', 'size_label': '크기', 'btn_submit': '다운로드', 'footer': '개인정보 보호.', 'error_large': '파일이 너무 큽니다' },
-    'id': { 'name': 'Bahasa Indonesia', 'dir': 'ltr', 'recommend': 'Disarankan', 'badge': 'HOT', 'seo_title': 'Konverter ICO', 'seo_desc': 'Ubah ke ICO.', 'h1': 'Konverter ICO', 'subtitle': 'Pembuat Favicon', 'upload_label': 'Unggah gambar', 'size_label': 'Ukuran', 'btn_submit': 'Unduh .ICO', 'footer': 'Privasi dilindungi.', 'error_large': 'File terlalu besar' },
-    'tr': { 'name': 'Türkçe', 'dir': 'ltr', 'recommend': 'Önerilen', 'badge': 'POP', 'seo_title': 'ICO Dönüştürücü', 'seo_desc': 'ICO\'ya çevir.', 'h1': 'ICO Dönüştürücü', 'subtitle': 'Favicon Oluşturucu', 'upload_label': 'Dosya yükle', 'size_label': 'Boyut', 'btn_submit': 'İndir', 'footer': 'Gizlilik korumalı.', 'error_large': 'Dosya çok büyük' },
-    'vi': { 'name': 'Tiếng Việt', 'dir': 'ltr', 'recommend': 'Đề xuất', 'badge': 'HOT', 'seo_title': 'Chuyển đổi ICO', 'seo_desc': 'Sang định dạng ICO.', 'h1': 'Chuyển đổi ICO', 'subtitle': 'Tạo Favicon', 'upload_label': 'Tải lên', 'size_label': 'Kích thước', 'btn_submit': 'Tải xuống', 'footer': 'Bảo mật riêng tư.', 'error_large': 'Tệp quá lớn' },
-    'th': { 'name': 'ไทย', 'dir': 'ltr', 'recommend': 'แนะนำ', 'badge': 'ฮิต', 'seo_title': 'ตัวแปลง ICO', 'seo_desc': 'แปลงเป็น ICO', 'h1': 'ตัวแปลง ICO', 'subtitle': 'สร้าง Favicon', 'upload_label': 'อัปโหลด', 'size_label': 'ขนาด', 'btn_submit': 'ดาวน์โหลด', 'footer': 'ความเป็นส่วนตัว', 'error_large': 'ไฟล์ใหญ่เกินไป' },
-    'hi': { 'name': 'हिन्दी', 'dir': 'ltr', 'recommend': 'अनुशंसित', 'badge': 'आम', 'seo_title': 'ICO कन्वर्टर', 'seo_desc': 'ICO में बदलें', 'h1': 'ICO कन्वर्टर', 'subtitle': 'Favicon जनरेटर', 'upload_label': 'अपलोड करें', 'size_label': 'आकार', 'btn_submit': 'डाउनलोड करें', 'footer': 'गोपनीयता', 'error_large': 'फ़ाइल बहुत बड़ी है' },
-    'sv': { 'name': 'Svenska', 'dir': 'ltr', 'recommend': 'Standard', 'badge': 'TOP', 'seo_title': 'ICO Konverterare', 'seo_desc': 'Till ICO.', 'h1': 'ICO Konverterare', 'subtitle': 'Favicon Generator', 'upload_label': 'Ladda upp', 'size_label': 'Storlek', 'btn_submit': 'Ladda ner', 'footer': 'Integritetsskyddad.', 'error_large': 'Filen är för stor' },
-    'uk': { 'name': 'Українська', 'dir': 'ltr', 'recommend': 'Стандарт', 'badge': 'ХІТ', 'seo_title': 'Конвертер ICO', 'seo_desc': 'В ICO.', 'h1': 'Конвертер ICO', 'subtitle': 'Генератор іконок', 'upload_label': 'Завантажити', 'size_label': 'Розмір', 'btn_submit': 'Завантажити', 'footer': 'Конфіденційність.', 'error_large': 'Файл занадто великий' },
-    'ar': { 'name': 'العربية', 'dir': 'rtl', 'recommend': 'موصى به', 'badge': 'شائع', 'seo_title': 'محول ICO', 'seo_desc': 'تحويل إلى ICO.', 'h1': 'محول ICO', 'subtitle': 'مولد أيقونات', 'upload_label': 'رفع صورة', 'size_label': 'الحجم', 'btn_submit': 'تحميل .ICO', 'footer': 'حماية الخصوصية.', 'error_large': 'الملف كبير جداً' },
-    'he': { 'name': 'עברית', 'dir': 'rtl', 'recommend': 'מומלץ', 'badge': 'נפוץ', 'seo_title': 'ממיר ICO', 'seo_desc': 'להמיר ל-ICO.', 'h1': 'ממיר ICO', 'subtitle': 'יוצר אייקונים', 'upload_label': 'העלאת תמונה', 'size_label': 'גודל', 'btn_submit': 'הורד .ICO', 'footer': 'פרטיות מוגנת.', 'error_large': 'קובץ גדול מדי' }
+    'en': { **EN_GUIDE, 'name': 'English', 'dir': 'ltr', 'recommend': 'Recommended', 'badge': 'HOT', 'seo_title': 'Free Online ICO Converter', 'seo_desc': 'Convert PNG/JPG to ICO. Professional tool.', 'h1': 'ICO Converter', 'subtitle': 'Professional Favicon Generator', 'upload_label': 'Click to upload or Drag image', 'size_label': 'Target Size', 'btn_submit': 'Generate ICO', 'footer': 'Securely processed. Privacy protected.', 'error_large': 'File too large (Max 4MB)' },
+
+    'zh': {
+        'name': '简体中文', 'dir': 'ltr', 'recommend': '推荐尺寸', 'badge': '常用',
+        'seo_title': '在线 ICO 图标生成器', 'seo_desc': '免费在线图片转 ICO 工具。支持透明背景。',
+        'h1': 'ICO 图标生成器', 'subtitle': '一键生成透明背景图标', 'upload_label': '点击选择 或 拖拽图片', 'size_label': '目标尺寸', 'btn_submit': '生成并下载 .ICO', 'footer': '数据安全保护，不保存任何图片。', 'error_large': '文件过大 (最大 4MB)',
+        # 创意指引文案
+        'guide_what_title': '瞬间识别',
+        'guide_what_desc': '图标将显示在这里，让您的网页在标签海中脱颖而出。',
+        'guide_how_title': '极速集成',
+        'guide_copy_btn': '复制',
+        'guide_copied': '已复制!',
+    },
+
+    'tw': {
+        'name': '繁體中文', 'dir': 'ltr', 'recommend': '推薦尺寸', 'badge': '常用',
+        'seo_title': '線上 ICO 圖示產生器', 'seo_desc': '免費線上圖片轉 ICO 工具。',
+        'h1': 'ICO 圖示產生器', 'subtitle': '一鍵生成透明背景圖示', 'upload_label': '點擊選擇 或 拖曳圖片', 'size_label': '目標尺寸', 'btn_submit': '產生並下載 .ICO', 'footer': '資料安全保護，不保存任何圖片。', 'error_large': '檔案過大 (最大 4MB)',
+        'guide_what_title': '瞬間識別',
+        'guide_what_desc': '圖示將顯示在這裡，讓您的網頁在分頁海中脫穎而出。',
+        'guide_how_title': '極速整合',
+        'guide_copy_btn': '複製',
+        'guide_copied': '已複製!',
+    },
+
+    'es': { **EN_GUIDE, 'name': 'Español', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT', 'seo_title': 'Convertidor ICO Online', 'seo_desc': 'Convierte imágenes a ICO.', 'h1': 'Convertidor ICO', 'subtitle': 'Generador de Favicon', 'upload_label': 'Clic para subir', 'size_label': 'Tamaño', 'btn_submit': 'Generar .ICO', 'footer': 'Privacidad protegida.', 'error_large': 'Archivo muy grande' },
+    'fr': { **EN_GUIDE, 'name': 'Français', 'dir': 'ltr', 'recommend': 'Recommandé', 'badge': 'TOP', 'seo_title': 'Convertisseur ICO', 'seo_desc': 'Convertir en ICO.', 'h1': 'Convertisseur ICO', 'subtitle': 'Générateur de Favicon', 'upload_label': 'Uploader une image', 'size_label': 'Taille', 'btn_submit': 'Générer .ICO', 'footer': 'Confidentialité respectée.', 'error_large': 'Fichier trop volumineux' },
+    'de': { **EN_GUIDE, 'name': 'Deutsch', 'dir': 'ltr', 'recommend': 'Empfohlen', 'badge': 'TOP', 'seo_title': 'ICO Konverter', 'seo_desc': 'In ICO umwandeln.', 'h1': 'ICO Konverter', 'subtitle': 'Favicon-Generator', 'upload_label': 'Bild hochladen', 'size_label': 'Größe', 'btn_submit': '.ICO Herunterladen', 'footer': 'Datenschutz.', 'error_large': 'Datei zu groß' },
+    'it': { **EN_GUIDE, 'name': 'Italiano', 'dir': 'ltr', 'recommend': 'Consigliato', 'badge': 'TOP', 'seo_title': 'Convertitore ICO', 'seo_desc': 'Converti in ICO.', 'h1': 'Convertitore ICO', 'subtitle': 'Generatore di Favicon', 'upload_label': 'Clicca per caricare', 'size_label': 'Dimensione', 'btn_submit': 'Scarica .ICO', 'footer': 'Privacy protetta.', 'error_large': 'File troppo grande' },
+    'pt': { **EN_GUIDE, 'name': 'Português', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT', 'seo_title': 'Conversor ICO', 'seo_desc': 'Converta para ICO.', 'h1': 'Conversor de ICO', 'subtitle': 'Gerador de Favicon', 'upload_label': 'Clique para subir', 'size_label': 'Tamanho', 'btn_submit': 'Baixar .ICO', 'footer': 'Privacidade protegida.', 'error_large': 'Arquivo muito grande' },
+    'ru': { **EN_GUIDE, 'name': 'Русский', 'dir': 'ltr', 'recommend': 'Стандарт', 'badge': 'ХИТ', 'seo_title': 'Конвертер ICO', 'seo_desc': 'Конвертировать в ICO.', 'h1': 'Конвертер ICO', 'subtitle': 'Генератор иконок', 'upload_label': 'Загрузить файл', 'size_label': 'Размер', 'btn_submit': 'Скачать .ICO', 'footer': 'Конфиденциальность.', 'error_large': 'Файл слишком большой' },
+    'nl': { **EN_GUIDE, 'name': 'Nederlands', 'dir': 'ltr', 'recommend': 'Aanbevolen', 'badge': 'TOP', 'seo_title': 'ICO Converter', 'seo_desc': 'Naar ICO converteren.', 'h1': 'ICO Converter', 'subtitle': 'Favicon Generator', 'upload_label': 'Klik om te uploaden', 'size_label': 'Grootte', 'btn_submit': 'Downloaden', 'footer': 'Privacy beschermd.', 'error_large': 'Bestand te groot' },
+    'pl': { **EN_GUIDE, 'name': 'Polski', 'dir': 'ltr', 'recommend': 'Zalecane', 'badge': 'HIT', 'seo_title': 'Konwerter ICO', 'seo_desc': 'Konwertuj na ICO.', 'h1': 'Konwerter ICO', 'subtitle': 'Generator Favicon', 'upload_label': 'Prześlij plik', 'size_label': 'Rozmiar', 'btn_submit': 'Pobierz .ICO', 'footer': 'Ochrona prywatności.', 'error_large': 'Plik zbyt duży' },
+    'ja': { **EN_GUIDE, 'name': '日本語', 'dir': 'ltr', 'recommend': '推奨サイズ', 'badge': '人気', 'seo_title': 'ICO変換ツール', 'seo_desc': 'ICO形式に変換。', 'h1': 'ICO 変換ツール', 'subtitle': 'プロフェッショナルなアイコン作成', 'upload_label': 'アップロード', 'size_label': 'サイズ', 'btn_submit': 'ダウンロード', 'footer': 'プライバシー保護。', 'error_large': 'ファイルサイズ過大' },
+    'ko': { **EN_GUIDE, 'name': '한국어', 'dir': 'ltr', 'recommend': '추천 크기', 'badge': '인기', 'seo_title': 'ICO 변환기', 'seo_desc': 'ICO 변환 도구.', 'h1': 'ICO 변환기', 'subtitle': '전문 파비콘 생성 도구', 'upload_label': '업로드', 'size_label': '크기', 'btn_submit': '다운로드', 'footer': '개인정보 보호.', 'error_large': '파일이 너무 큽니다' },
+    'id': { **EN_GUIDE, 'name': 'Bahasa Indonesia', 'dir': 'ltr', 'recommend': 'Disarankan', 'badge': 'HOT', 'seo_title': 'Konverter ICO', 'seo_desc': 'Ubah ke ICO.', 'h1': 'Konverter ICO', 'subtitle': 'Pembuat Favicon', 'upload_label': 'Unggah gambar', 'size_label': 'Ukuran', 'btn_submit': 'Unduh .ICO', 'footer': 'Privasi dilindungi.', 'error_large': 'File terlalu besar' },
+    'tr': { **EN_GUIDE, 'name': 'Türkçe', 'dir': 'ltr', 'recommend': 'Önerilen', 'badge': 'POP', 'seo_title': 'ICO Dönüştürücü', 'seo_desc': 'ICO\'ya çevir.', 'h1': 'ICO Dönüştürücü', 'subtitle': 'Favicon Oluşturucu', 'upload_label': 'Dosya yükle', 'size_label': 'Boyut', 'btn_submit': 'İndir', 'footer': 'Gizlilik korumalı.', 'error_large': 'Dosya çok büyük' },
+    'vi': { **EN_GUIDE, 'name': 'Tiếng Việt', 'dir': 'ltr', 'recommend': 'Đề xuất', 'badge': 'HOT', 'seo_title': 'Chuyển đổi ICO', 'seo_desc': 'Sang định dạng ICO.', 'h1': 'Chuyển đổi ICO', 'subtitle': 'Tạo Favicon', 'upload_label': 'Tải lên', 'size_label': 'Kích thước', 'btn_submit': 'Tải xuống', 'footer': 'Bảo mật riêng tư.', 'error_large': 'Tệp quá lớn' },
+    'th': { **EN_GUIDE, 'name': 'ไทย', 'dir': 'ltr', 'recommend': 'แนะนำ', 'badge': 'ฮิต', 'seo_title': 'ตัวแปลง ICO', 'seo_desc': 'แปลงเป็น ICO', 'h1': 'ตัวแปลง ICO', 'subtitle': 'สร้าง Favicon', 'upload_label': 'อัปโหลด', 'size_label': 'ขนาด', 'btn_submit': 'ดาวน์โหลด', 'footer': 'ความเป็นส่วนตัว', 'error_large': 'ไฟล์ใหญ่เกินไป' },
+    'hi': { **EN_GUIDE, 'name': 'हिन्दी', 'dir': 'ltr', 'recommend': 'अनुशंसित', 'badge': 'आम', 'seo_title': 'ICO कन्वर्टर', 'seo_desc': 'ICO में बदलें', 'h1': 'ICO कन्वर्टर', 'subtitle': 'Favicon जनरेटर', 'upload_label': 'अपलोड करें', 'size_label': 'आकार', 'btn_submit': 'डाउनलोड करें', 'footer': 'गोपनीयता', 'error_large': 'फ़ाइल बहुत बड़ी है' },
+    'sv': { **EN_GUIDE, 'name': 'Svenska', 'dir': 'ltr', 'recommend': 'Standard', 'badge': 'TOP', 'seo_title': 'ICO Konverterare', 'seo_desc': 'Till ICO.', 'h1': 'ICO Konverterare', 'subtitle': 'Favicon Generator', 'upload_label': 'Ladda upp', 'size_label': 'Storlek', 'btn_submit': 'Ladda ner', 'footer': 'Integritetsskyddad.', 'error_large': 'Filen är för stor' },
+    'uk': { **EN_GUIDE, 'name': 'Українська', 'dir': 'ltr', 'recommend': 'Стандарт', 'badge': 'ХІТ', 'seo_title': 'Конвертер ICO', 'seo_desc': 'В ICO.', 'h1': 'Конвертер ICO', 'subtitle': 'Генератор іконок', 'upload_label': 'Завантажити', 'size_label': 'Розмір', 'btn_submit': 'Завантажити', 'footer': 'Конфіденційність.', 'error_large': 'Файл занадто великий' },
+    'ar': { **EN_GUIDE, 'name': 'العربية', 'dir': 'rtl', 'recommend': 'موصى به', 'badge': 'شائع', 'seo_title': 'محول ICO', 'seo_desc': 'تحويل إلى ICO.', 'h1': 'محول ICO', 'subtitle': 'مولد أيقونات', 'upload_label': 'رفع صورة', 'size_label': 'الحجم', 'btn_submit': 'تحميل .ICO', 'footer': 'حماية الخصوصية.', 'error_large': 'الملف كبير جداً' },
+    'he': { **EN_GUIDE, 'name': 'עברית', 'dir': 'rtl', 'recommend': 'מומלץ', 'badge': 'נפוץ', 'seo_title': 'ממיר ICO', 'seo_desc': 'להמיר ל-ICO.', 'h1': 'ממיר ICO', 'subtitle': 'יוצר אייקונים', 'upload_label': 'העלאת תמונה', 'size_label': 'גודל', 'btn_submit': 'הורד .ICO', 'footer': 'פרטיות מוגנת.', 'error_large': 'קובץ גדול מדי' }
 }
 
 SUPPORTED_LANGS = list(TRANSLATIONS.keys())
@@ -98,11 +127,6 @@ def sitemap():
     xml = f"""<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{''.join(urls)}</urlset>"""
     return Response(xml, mimetype="application/xml")
 
-# ==========================================
-# 3. 读取本地的 favicon.ico 文件
-# ==========================================
 @app.route('/favicon.ico')
 def favicon():
-    # 发送项目根目录下的 favicon.ico 文件
-    # 注意：'../favicon.ico' 是相对于当前 api/ 文件夹的路径
     return send_file('../favicon.ico', mimetype='image/vnd.microsoft.icon')

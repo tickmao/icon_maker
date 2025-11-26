@@ -3,9 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
     <link rel="icon" href="/favicon.ico?v=4" type="image/x-icon" />
-
     <title>{{ t.seo_title }}</title>
     <meta name="description" content="{{ t.seo_desc }}" />
 
@@ -52,7 +50,7 @@
     onclick="closeLangMenu(event)"
   >
     <div
-      class="relative animate-fade-in bg-white w-full max-w-md rounded-xl shadow-xl border-t-4 border-green-500 z-10"
+      class="relative animate-fade-in bg-white w-full max-w-md rounded-xl shadow-xl border-t-4 border-green-500 z-10 mb-8"
     >
       <div class="absolute top-4 right-4 rtl:right-auto rtl:left-4 z-20">
         <button
@@ -164,7 +162,6 @@
 
         <div>
           <label class="block text-sm font-bold text-gray-700 mb-3">{{ t.size_label }}</label>
-
           <div class="grid grid-cols-2 gap-4">
             <label class="cursor-pointer relative">
               <input type="radio" name="size" value="16" class="peer sr-only" />
@@ -183,9 +180,8 @@
                 32 x 32
                 <span
                   class="absolute -top-2.5 -right-2 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-md transform scale-100 z-10 font-normal tracking-wide"
+                  >{{ t.recommend }}</span
                 >
-                  {{ t.recommend }}
-                </span>
               </div>
             </label>
 
@@ -197,7 +193,6 @@
                 48 x 48
               </div>
             </label>
-
             <label class="cursor-pointer relative">
               <input type="radio" name="size" value="64" class="peer sr-only" />
               <div
@@ -218,18 +213,66 @@
       </form>
     </div>
 
-    <footer class="mt-8 text-center space-y-2">
-      <p class="text-gray-400 text-xs flex items-center justify-center gap-1">
-        <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-          ></path>
-        </svg>
-        {{ t.footer }}
-      </p>
+    <div class="w-full max-w-md animate-fade-in delay-100 mb-12">
+      <div
+        class="bg-white/80 backdrop-blur-sm rounded-xl shadow-sm border border-gray-200/60 overflow-hidden"
+      >
+        <div class="grid grid-cols-2 divide-x divide-gray-100">
+          <div class="p-6 bg-gray-50/50 flex flex-col items-center justify-center text-center">
+            <div
+              class="w-full max-w-[140px] bg-white rounded-t-lg shadow-sm border border-gray-200 border-b-0 p-2 relative group"
+            >
+              <div class="flex items-center gap-2">
+                <img src="/favicon.ico?v=4" class="w-4 h-4 animate-pulse" />
+                <div class="h-2 w-16 bg-gray-100 rounded-full"></div>
+              </div>
+              <div
+                class="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-[10px] py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+              >
+                Favicon Lives Here
+              </div>
+            </div>
+            <div class="w-full h-3 bg-gray-200 rounded-b-sm mb-3"></div>
+            <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wide">
+              {{ t.guide_what_title }}
+            </h3>
+            <p class="text-[10px] text-gray-500 mt-1 leading-snug">{{ t.guide_what_desc }}</p>
+          </div>
+
+          <div class="p-6 bg-slate-900 flex flex-col justify-center relative group">
+            <div class="absolute top-3 left-3 flex gap-1.5">
+              <div class="w-2 h-2 rounded-full bg-red-500"></div>
+              <div class="w-2 h-2 rounded-full bg-yellow-500"></div>
+              <div class="w-2 h-2 rounded-full bg-green-500"></div>
+            </div>
+
+            <h3 class="text-[10px] font-bold text-slate-500 uppercase tracking-wide mb-2 mt-4 ml-1">
+              {{ t.guide_how_title }}
+            </h3>
+
+            <div class="relative">
+              <code
+                id="code-block"
+                class="block font-mono text-[10px] text-slate-300 leading-relaxed bg-slate-800/50 p-2 rounded border border-slate-700 select-all"
+              >
+                &lt;link rel="icon"<br />href="<span class="text-green-400">favicon.ico</span>"
+                /&gt;
+              </code>
+
+              <button
+                onclick="copyCode(this)"
+                class="absolute top-0 right-0 bottom-0 bg-green-600 text-white text-xs px-3 rounded-r font-bold opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center hover:bg-green-500 active:bg-green-700"
+              >
+                {{ t.guide_copy_btn }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer class="text-center space-y-2 pb-8">
+      <p class="text-gray-400 text-xs flex items-center justify-center gap-1">{{ t.footer }}</p>
     </footer>
 
     <script>
@@ -258,6 +301,19 @@
           document.getElementById('file-label').innerText = file.name
           document.getElementById('file-label').classList.add('text-green-700', 'font-bold')
         }
+      }
+      // 复制代码功能
+      function copyCode(btn) {
+        const code = '<link rel="icon" href="favicon.ico" />'
+        navigator.clipboard.writeText(code).then(() => {
+          const originalText = btn.innerText
+          btn.innerText = '{{ t.guide_copied }}'
+          btn.classList.add('bg-slate-700') // 复制后的视觉反馈
+          setTimeout(() => {
+            btn.innerText = originalText
+            btn.classList.remove('bg-slate-700')
+          }, 2000)
+        })
       }
     </script>
   </body>
