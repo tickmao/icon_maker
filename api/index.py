@@ -7,280 +7,348 @@ from flask import (Flask, Response, redirect, render_template, request,
 from PIL import Image
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_full_v5')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_full_localized_v7')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 通用指引文案 (英语兜底)
-# ==========================================
-EN_GUIDE = {
-    'tab_create': 'Create',
-    'tab_guide': 'Guide',
-    'guide_preview_title': 'Visual Preview',
-    'guide_preview_desc': 'Your icon will be displayed in browser tabs, bookmarks, and history to help users identify your brand instantly.',
-    'step1_title': 'Upload to Server',
-    'step1_desc': 'Download the generated .ico file and upload it to the root directory of your website server (e.g. /public_html).',
-    'step1_file_path': '/root/',
-    'step1_file_name': 'favicon.ico',
-    'step2_title': 'Update HTML Code',
-    'step2_desc': 'Copy the code below and paste it into the <head> section of your HTML files, before the closing tag.',
-    'guide_copy_btn': 'Copy',
-    'guide_copied': 'Copied!',
-}
-
-# ==========================================
-# 2. 终极全球语言包 (22种语言完整配置)
+# 1. 终极全球语言包 (22种语言 - 全文翻译)
 # ==========================================
 TRANSLATIONS = {
-    # --- 英语 ---
+    # --- English (英语) ---
     'en': {
-        **EN_GUIDE,
         'name': 'English', 'dir': 'ltr', 'recommend': 'Recommended', 'badge': 'HOT',
-        'seo_title': 'Free Online ICO Converter - Create Transparent Favicon (Fast & Secure)',
-        'seo_desc': 'Best free online ICO converter. Convert PNG, JPG, WEBP to ICO format instantly. Support transparent backgrounds.',
-        'keywords': 'ico converter, favicon generator, png to ico, jpg to ico, make favicon, transparent ico, online icon maker',
-        'h1': 'ICO Converter', 'subtitle': 'Professional Favicon Generator', 'upload_label': 'Click to upload or Drag image',
-        'size_label': 'Target Size', 'btn_submit': 'Generate ICO', 'footer': 'Securely processed. Privacy protected.', 'error_large': 'File too large (Max 4MB)'
+        'seo_title': 'Free Online ICO Converter - Create Transparent Favicon',
+        'seo_desc': 'Best free online ICO converter. Convert PNG, JPG to ICO format instantly.',
+        'keywords': 'ico converter, favicon generator, png to ico, make favicon',
+        'h1': 'ICO Converter', 'subtitle': 'Professional Favicon Generator',
+        'upload_label': 'Click to upload or Drag image', 'size_label': 'Target Size', 'btn_submit': 'Generate ICO',
+        'footer': 'Securely processed. Privacy protected.', 'error_large': 'File too large (Max 4MB)',
+        # Guide
+        'tab_create': 'Create', 'tab_guide': 'Guide',
+        'guide_preview_title': 'Visual Preview', 'guide_preview_desc': 'Your icon will be displayed in browser tabs to help users identify your brand.',
+        'step1_title': 'Upload to Server', 'step1_desc': 'Upload the favicon.ico file to your website root directory.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Update HTML', 'step2_desc': 'Paste this code into the <head> section of your HTML.',
+        'guide_copy_btn': 'Copy', 'guide_copied': 'Copied!'
     },
 
     # --- 简体中文 ---
     'zh': {
         'name': '简体中文', 'dir': 'ltr', 'recommend': '推荐尺寸', 'badge': '常用',
-        'seo_title': '在线 ICO 图标生成器 - 免费制作透明 Favicon (极速版)',
-        'seo_desc': '免费在线将图片转换为 ICO 图标。支持透明背景，一键生成多种尺寸。网站 Favicon 制作最佳工具。',
-        'keywords': 'ICO生成器, favicon制作, 在线转ICO, png转ico, jpg转ico, 网站图标制作, 透明ico',
-        'h1': 'ICO 图标生成器', 'subtitle': '一键生成透明背景图标', 'upload_label': '点击选择 或 拖拽图片',
-        'size_label': '目标尺寸', 'btn_submit': '生成并下载 .ICO', 'footer': '数据安全保护，不保存任何图片。', 'error_large': '文件过大 (最大 4MB)',
+        'seo_title': '在线 ICO 图标生成器 - 免费制作透明 Favicon',
+        'seo_desc': '免费在线将图片转换为 ICO 图标。支持透明背景，一键生成。',
+        'keywords': 'ICO生成器, favicon制作, 在线转ICO, png转ico',
+        'h1': 'ICO 图标生成器', 'subtitle': '一键生成透明背景图标',
+        'upload_label': '点击选择 或 拖拽图片', 'size_label': '目标尺寸', 'btn_submit': '生成并下载 .ICO',
+        'footer': '数据安全保护，不保存任何图片。', 'error_large': '文件过大 (最大 4MB)',
+        # Guide
         'tab_create': '制作图标', 'tab_guide': '使用指南',
-        'guide_preview_title': '效果预览', 'guide_preview_desc': '您的图标将显示在浏览器标签页、书签栏及历史记录中。',
-        'step1_title': '上传至服务器', 'step1_desc': '下载生成的 .ico 文件，并将其上传到您网站服务器的根目录下。', 'step1_file_path': '/根目录/', 'step1_file_name': 'favicon.ico',
-        'step2_title': '引入 HTML 代码', 'step2_desc': '复制下方的代码片段，粘贴到您网页源文件 <head> 标签之间。',
+        'guide_preview_title': '效果预览', 'guide_preview_desc': '图标将显示在浏览器标签页中，提升品牌识别度。',
+        'step1_title': '上传至服务器', 'step1_desc': '将生成的 favicon.ico 上传到网站根目录。', 'step1_file_path': '/根目录/', 'step1_file_name': 'favicon.ico',
+        'step2_title': '引入 HTML', 'step2_desc': '将下方代码粘贴到网页 <head> 标签之间。',
         'guide_copy_btn': '复制', 'guide_copied': '已复制!'
     },
 
     # --- 繁体中文 ---
     'tw': {
         'name': '繁體中文', 'dir': 'ltr', 'recommend': '推薦尺寸', 'badge': '常用',
-        'seo_title': '線上 ICO 圖示產生器 - 製作透明 Favicon (免費工具)',
-        'seo_desc': '免費線上圖片轉 ICO 工具。支援透明背景，快速產生。網頁 Favicon 製作神器。',
-        'keywords': 'ICO產生器, favicon製作, 線上轉ICO, png轉ico, 網站圖示, 透明ico',
-        'h1': 'ICO 圖示產生器', 'subtitle': '一鍵生成透明背景圖示', 'upload_label': '點擊選擇 或 拖曳圖片',
-        'size_label': '目標尺寸', 'btn_submit': '產生並下載 .ICO', 'footer': '資料安全保護，不保存任何圖片。', 'error_large': '檔案過大 (最大 4MB)',
+        'seo_title': '線上 ICO 圖示產生器 - 製作透明 Favicon',
+        'seo_desc': '免費線上圖片轉 ICO 工具。支援透明背景。',
+        'keywords': 'ICO產生器, favicon製作, 線上轉ICO',
+        'h1': 'ICO 圖示產生器', 'subtitle': '一鍵生成透明背景圖示',
+        'upload_label': '點擊選擇 或 拖曳圖片', 'size_label': '目標尺寸', 'btn_submit': '產生並下載 .ICO',
+        'footer': '資料安全保護，不保存任何圖片。', 'error_large': '檔案過大 (最大 4MB)',
+        # Guide
         'tab_create': '製作圖示', 'tab_guide': '使用指南',
-        'guide_preview_title': '效果預覽', 'guide_preview_desc': '您的圖示將顯示在瀏覽器分頁上，有助於快速識別品牌。',
-        'step1_title': '上傳至伺服器', 'step1_desc': '下載產生的 .ico 檔案，並將其上傳到您網站伺服器的根目錄下。', 'step1_file_path': '/根目錄/', 'step1_file_name': 'favicon.ico',
-        'step2_title': '引入 HTML 程式碼', 'step2_desc': '複製下方的程式碼片段，貼上到您網頁原始檔 <head> 標籤之間。',
+        'guide_preview_title': '效果預覽', 'guide_preview_desc': '圖示將顯示在瀏覽器分頁上，有助於識別品牌。',
+        'step1_title': '上傳至伺服器', 'step1_desc': '將產生的 favicon.ico 上傳到網站根目錄。', 'step1_file_path': '/根目錄/', 'step1_file_name': 'favicon.ico',
+        'step2_title': '引入 HTML', 'step2_desc': '將下方程式碼貼到網頁 <head> 標籤之間。',
         'guide_copy_btn': '複製', 'guide_copied': '已複製!'
     },
 
-    # --- 西班牙语 ---
+    # --- Español (西班牙语) ---
     'es': {
-        **EN_GUIDE,
         'name': 'Español', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT',
-        'seo_title': 'Convertidor ICO Online - Crear Favicon Transparente',
-        'seo_desc': 'Convierte imágenes PNG/JPG a formato ICO en línea gratis.',
-        'keywords': 'convertidor ico, generador favicon, png a ico, crear favicon',
+        'seo_title': 'Convertidor ICO Online', 'seo_desc': 'Convierte imágenes a ICO gratis.',
+        'keywords': 'convertidor ico, favicon',
         'h1': 'Convertidor ICO', 'subtitle': 'Generador de Favicon', 'upload_label': 'Clic para subir',
-        'size_label': 'Tamaño', 'btn_submit': 'Generar .ICO', 'footer': 'Privacidad protegida.', 'error_large': 'Archivo muy grande'
+        'size_label': 'Tamaño', 'btn_submit': 'Generar .ICO', 'footer': 'Privacidad protegida.', 'error_large': 'Archivo muy grande',
+        # Guide
+        'tab_create': 'Crear', 'tab_guide': 'Guía',
+        'guide_preview_title': 'Vista Previa', 'guide_preview_desc': 'Su icono aparecerá en las pestañas del navegador.',
+        'step1_title': 'Subir al Servidor', 'step1_desc': 'Sube el archivo favicon.ico al directorio raíz.', 'step1_file_path': '/raiz/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Actualizar HTML', 'step2_desc': 'Pega este código en la sección <head>.',
+        'guide_copy_btn': 'Copiar', 'guide_copied': '¡Copiado!'
     },
 
-    # --- 法语 ---
+    # --- Français (法语) ---
     'fr': {
-        **EN_GUIDE,
         'name': 'Français', 'dir': 'ltr', 'recommend': 'Recommandé', 'badge': 'TOP',
-        'seo_title': 'Convertisseur ICO en ligne - Créer Favicon Gratuit',
-        'seo_desc': 'Convertir image en ICO gratuitement. Fond transparent supporté.',
-        'keywords': 'convertisseur ico, générateur favicon, png en ico, créer favicon',
+        'seo_title': 'Convertisseur ICO en ligne', 'seo_desc': 'Créer Favicon gratuitement.',
+        'keywords': 'convertisseur ico, favicon',
         'h1': 'Convertisseur ICO', 'subtitle': 'Générateur de Favicon', 'upload_label': 'Uploader une image',
-        'size_label': 'Taille', 'btn_submit': 'Générer .ICO', 'footer': 'Confidentialité respectée.', 'error_large': 'Fichier trop volumineux'
+        'size_label': 'Taille', 'btn_submit': 'Générer .ICO', 'footer': 'Confidentialité respectée.', 'error_large': 'Fichier trop volumineux',
+        # Guide
+        'tab_create': 'Créer', 'tab_guide': 'Guide',
+        'guide_preview_title': 'Aperçu Visuel', 'guide_preview_desc': 'Votre icône apparaîtra dans les onglets du navigateur.',
+        'step1_title': 'Mettre sur Serveur', 'step1_desc': 'Téléversez favicon.ico dans le répertoire racine.', 'step1_file_path': '/racine/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Code HTML', 'step2_desc': 'Collez ce code dans la section <head>.',
+        'guide_copy_btn': 'Copier', 'guide_copied': 'Copié!'
     },
 
-    # --- 德语 ---
+    # --- Deutsch (德语) ---
     'de': {
-        **EN_GUIDE,
         'name': 'Deutsch', 'dir': 'ltr', 'recommend': 'Empfohlen', 'badge': 'TOP',
-        'seo_title': 'Online ICO Konverter - Favicon erstellen',
-        'seo_desc': 'Bilder online in ICO umwandeln. Professionelles Werkzeug.',
-        'keywords': 'ico konverter, favicon erstellen, png in ico, bild in ico',
+        'seo_title': 'ICO Konverter', 'seo_desc': 'Favicon erstellen.',
+        'keywords': 'ico konverter, favicon',
         'h1': 'ICO Konverter', 'subtitle': 'Favicon-Generator', 'upload_label': 'Bild hochladen',
-        'size_label': 'Größe', 'btn_submit': '.ICO Herunterladen', 'footer': 'Datenschutz.', 'error_large': 'Datei zu groß'
+        'size_label': 'Größe', 'btn_submit': '.ICO Herunterladen', 'footer': 'Datenschutz.', 'error_large': 'Datei zu groß',
+        # Guide
+        'tab_create': 'Erstellen', 'tab_guide': 'Anleitung',
+        'guide_preview_title': 'Vorschau', 'guide_preview_desc': 'Ihr Icon wird in den Browser-Tabs angezeigt.',
+        'step1_title': 'Auf Server laden', 'step1_desc': 'Laden Sie favicon.ico in das Stammverzeichnis hoch.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML einfügen', 'step2_desc': 'Fügen Sie diesen Code in den <head> Bereich ein.',
+        'guide_copy_btn': 'Kopieren', 'guide_copied': 'Kopiert!'
     },
 
-    # --- 意大利语 ---
+    # --- Italiano (意大利语) ---
     'it': {
-        **EN_GUIDE,
         'name': 'Italiano', 'dir': 'ltr', 'recommend': 'Consigliato', 'badge': 'TOP',
-        'seo_title': 'Convertitore ICO Online - Crea Favicon',
-        'seo_desc': 'Converti immagini in ICO online. Strumento professionale.',
-        'keywords': 'convertitore ico, creare favicon, png in ico, generatore icone',
+        'seo_title': 'Convertitore ICO', 'seo_desc': 'Crea Favicon online.',
+        'keywords': 'convertitore ico, favicon',
         'h1': 'Convertitore ICO', 'subtitle': 'Generatore di Favicon', 'upload_label': 'Clicca per caricare',
-        'size_label': 'Dimensione', 'btn_submit': 'Scarica .ICO', 'footer': 'Privacy protetta.', 'error_large': 'File troppo grande'
+        'size_label': 'Dimensione', 'btn_submit': 'Scarica .ICO', 'footer': 'Privacy protetta.', 'error_large': 'File troppo grande',
+        # Guide
+        'tab_create': 'Crea', 'tab_guide': 'Guida',
+        'guide_preview_title': 'Anteprima', 'guide_preview_desc': 'La tua icona apparirà nelle schede del browser.',
+        'step1_title': 'Carica su Server', 'step1_desc': 'Carica favicon.ico nella directory principale.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Codice HTML', 'step2_desc': 'Incolla questo codice nella sezione <head>.',
+        'guide_copy_btn': 'Copia', 'guide_copied': 'Copiato!'
     },
 
-    # --- 葡萄牙语 ---
+    # --- Português (葡萄牙语) ---
     'pt': {
-        **EN_GUIDE,
         'name': 'Português', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT',
-        'seo_title': 'Conversor ICO Online - Criar Favicon',
-        'seo_desc': 'Converta imagens para ICO. Melhor gerador de Favicon grátis.',
-        'keywords': 'conversor ico, criar favicon, png para ico, gerador de icones',
+        'seo_title': 'Conversor ICO', 'seo_desc': 'Criar Favicon.',
+        'keywords': 'conversor ico, favicon',
         'h1': 'Conversor de ICO', 'subtitle': 'Gerador de Favicon', 'upload_label': 'Clique para subir',
-        'size_label': 'Tamanho', 'btn_submit': 'Baixar .ICO', 'footer': 'Privacidade protegida.', 'error_large': 'Arquivo muito grande'
+        'size_label': 'Tamanho', 'btn_submit': 'Baixar .ICO', 'footer': 'Privacidade protegida.', 'error_large': 'Arquivo muito grande',
+        # Guide
+        'tab_create': 'Criar', 'tab_guide': 'Guia',
+        'guide_preview_title': 'Pré-visualização', 'guide_preview_desc': 'Seu ícone aparecerá nas abas do navegador.',
+        'step1_title': 'Enviar ao Servidor', 'step1_desc': 'Envie favicon.ico para o diretório raiz.', 'step1_file_path': '/raiz/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Código HTML', 'step2_desc': 'Cole este código na seção <head>.',
+        'guide_copy_btn': 'Copiar', 'guide_copied': 'Copiado!'
     },
 
-    # --- 俄语 ---
+    # --- Русский (俄语) ---
     'ru': {
-        **EN_GUIDE,
         'name': 'Русский', 'dir': 'ltr', 'recommend': 'Стандарт', 'badge': 'ХИТ',
-        'seo_title': 'Онлайн конвертер ICO - Создать Favicon',
-        'seo_desc': 'Конвертировать PNG, JPG в ICO онлайн. Профессиональный инструмент.',
-        'keywords': 'конвертер ico, создать favicon, png в ico, иконка для сайта',
+        'seo_title': 'Конвертер ICO', 'seo_desc': 'Создать Favicon.',
+        'keywords': 'ico конвертер, favicon',
         'h1': 'Конвертер ICO', 'subtitle': 'Генератор иконок', 'upload_label': 'Загрузить файл',
-        'size_label': 'Размер', 'btn_submit': 'Скачать .ICO', 'footer': 'Конфиденциальность.', 'error_large': 'Файл слишком большой'
+        'size_label': 'Размер', 'btn_submit': 'Скачать .ICO', 'footer': 'Конфиденциальность.', 'error_large': 'Файл слишком большой',
+        # Guide
+        'tab_create': 'Создать', 'tab_guide': 'Гид',
+        'guide_preview_title': 'Предпросмотр', 'guide_preview_desc': 'Ваша иконка будет отображаться во вкладках браузера.',
+        'step1_title': 'Загрузка', 'step1_desc': 'Загрузите файл favicon.ico в корневой каталог сайта.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML код', 'step2_desc': 'Вставьте этот код в раздел <head>.',
+        'guide_copy_btn': 'Копия', 'guide_copied': 'Скопировано!'
     },
 
-    # --- 荷兰语 ---
+    # --- Nederlands (荷兰语) ---
     'nl': {
-        **EN_GUIDE,
         'name': 'Nederlands', 'dir': 'ltr', 'recommend': 'Aanbevolen', 'badge': 'TOP',
-        'seo_title': 'Online ICO Converter - Favicon Maken',
-        'seo_desc': 'Afbeeldingen converteren naar ICO. Professionele tool.',
-        'keywords': 'ico converter, favicon maken, png naar ico',
+        'seo_title': 'ICO Converter', 'seo_desc': 'Favicon maken.',
+        'keywords': 'ico converter, favicon',
         'h1': 'ICO Converter', 'subtitle': 'Favicon Generator', 'upload_label': 'Klik om te uploaden',
-        'size_label': 'Grootte', 'btn_submit': 'Downloaden', 'footer': 'Privacy beschermd.', 'error_large': 'Bestand te groot'
+        'size_label': 'Grootte', 'btn_submit': 'Downloaden', 'footer': 'Privacy beschermd.', 'error_large': 'Bestand te groot',
+        # Guide
+        'tab_create': 'Maken', 'tab_guide': 'Gids',
+        'guide_preview_title': 'Voorbeeld', 'guide_preview_desc': 'Uw pictogram verschijnt in browsertabbladen.',
+        'step1_title': 'Uploaden', 'step1_desc': 'Upload favicon.ico naar de hoofdmap.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML Code', 'step2_desc': 'Plak deze code in de <head> sectie.',
+        'guide_copy_btn': 'Kopiëren', 'guide_copied': 'Gekopieerd!'
     },
 
-    # --- 波兰语 ---
+    # --- Polski (波兰语) ---
     'pl': {
-        **EN_GUIDE,
         'name': 'Polski', 'dir': 'ltr', 'recommend': 'Zalecane', 'badge': 'HIT',
-        'seo_title': 'Konwerter ICO Online - Stwórz Favicon',
-        'seo_desc': 'Konwertuj obrazy na format ICO. Profesjonalne narzędzie.',
-        'keywords': 'konwerter ico, generator favicon, png na ico',
+        'seo_title': 'Konwerter ICO', 'seo_desc': 'Generator Favicon.',
+        'keywords': 'konwerter ico, favicon',
         'h1': 'Konwerter ICO', 'subtitle': 'Generator Favicon', 'upload_label': 'Prześlij plik',
-        'size_label': 'Rozmiar', 'btn_submit': 'Pobierz .ICO', 'footer': 'Ochrona prywatności.', 'error_large': 'Plik zbyt duży'
+        'size_label': 'Rozmiar', 'btn_submit': 'Pobierz .ICO', 'footer': 'Ochrona prywatności.', 'error_large': 'Plik zbyt duży',
+        # Guide
+        'tab_create': 'Stwórz', 'tab_guide': 'Instrukcja',
+        'guide_preview_title': 'Podgląd', 'guide_preview_desc': 'Twoja ikona pojawi się na kartach przeglądarki.',
+        'step1_title': 'Prześlij', 'step1_desc': 'Prześlij plik favicon.ico do katalogu głównego.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Kod HTML', 'step2_desc': 'Wklej ten kod w sekcji <head>.',
+        'guide_copy_btn': 'Kopiuj', 'guide_copied': 'Skopiowano!'
     },
 
-    # --- 日语 ---
+    # --- 日本語 (日语) ---
     'ja': {
-        **EN_GUIDE,
         'name': '日本語', 'dir': 'ltr', 'recommend': '推奨', 'badge': '人気',
-        'seo_title': 'ICO変換ツール - 無料でFavicon作成',
-        'seo_desc': '画像をICO形式に変換。プロフェッショナルな作成ツール。',
-        'keywords': 'ico 変換, ファビコン 作成, png ico 変換, フリーソフト',
+        'seo_title': 'ICO変換ツール', 'seo_desc': 'ファビコン作成。',
+        'keywords': 'ico 変換, ファビコン',
         'h1': 'ICO 変換ツール', 'subtitle': 'プロフェッショナルなアイコン作成', 'upload_label': 'アップロード',
-        'size_label': 'サイズ', 'btn_submit': 'ダウンロード', 'footer': 'プライバシー保護。', 'error_large': 'ファイルサイズ過大'
+        'size_label': 'サイズ', 'btn_submit': 'ダウンロード', 'footer': 'プライバシー保護。', 'error_large': 'ファイルサイズ過大',
+        # Guide
+        'tab_create': '作成', 'tab_guide': 'ガイド',
+        'guide_preview_title': 'プレビュー', 'guide_preview_desc': 'アイコンはブラウザのタブに表示されます。',
+        'step1_title': 'アップロード', 'step1_desc': 'favicon.ico をルートディレクトリに配置します。', 'step1_file_path': '/ルート/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTMLコード', 'step2_desc': '<head> セクションに貼り付けてください。',
+        'guide_copy_btn': 'コピー', 'guide_copied': '完了!'
     },
 
-    # --- 韩语 ---
+    # --- 한국어 (韩语) ---
     'ko': {
-        **EN_GUIDE,
         'name': '한국어', 'dir': 'ltr', 'recommend': '추천', 'badge': '인기',
-        'seo_title': 'ICO 변환기 - 파비콘 만들기',
-        'seo_desc': 'ICO 변환 도구. 전문 파비콘 생성기.',
-        'keywords': 'ico 변환, 파비콘 만들기, png ico 변환',
+        'seo_title': 'ICO 변환기', 'seo_desc': '파비콘 만들기.',
+        'keywords': 'ico 변환, 파비콘',
         'h1': 'ICO 변환기', 'subtitle': '전문 파비콘 생성 도구', 'upload_label': '업로드',
-        'size_label': '크기', 'btn_submit': '다운로드', 'footer': '개인정보 보호.', 'error_large': '파일이 너무 큽니다'
+        'size_label': '크기', 'btn_submit': '다운로드', 'footer': '개인정보 보호.', 'error_large': '파일이 너무 큽니다',
+        # Guide
+        'tab_create': '제작', 'tab_guide': '가이드',
+        'guide_preview_title': '미리보기', 'guide_preview_desc': '아이콘이 브라우저 탭에 표시됩니다.',
+        'step1_title': '업로드', 'step1_desc': 'favicon.ico 파일을 루트 디렉토리에 업로드하세요.', 'step1_file_path': '/루트/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML 코드', 'step2_desc': '<head> 섹션에 코드를 붙여넣으세요.',
+        'guide_copy_btn': '복사', 'guide_copied': '완료!'
     },
 
-    # --- 印尼语 ---
+    # --- Bahasa Indonesia (印尼语) ---
     'id': {
-        **EN_GUIDE,
         'name': 'Bahasa Indonesia', 'dir': 'ltr', 'recommend': 'Disarankan', 'badge': 'HOT',
-        'seo_title': 'Konverter ICO Online - Buat Favicon',
-        'seo_desc': 'Ubah gambar menjadi ICO online. Alat Favicon profesional.',
-        'keywords': 'konverter ico, buat favicon, ubah png ke ico',
+        'seo_title': 'Konverter ICO', 'seo_desc': 'Buat Favicon.',
+        'keywords': 'konverter ico, favicon',
         'h1': 'Konverter ICO', 'subtitle': 'Pembuat Favicon', 'upload_label': 'Unggah gambar',
-        'size_label': 'Ukuran', 'btn_submit': 'Unduh .ICO', 'footer': 'Privasi dilindungi.', 'error_large': 'File terlalu besar'
+        'size_label': 'Ukuran', 'btn_submit': 'Unduh .ICO', 'footer': 'Privasi dilindungi.', 'error_large': 'File terlalu besar',
+        # Guide
+        'tab_create': 'Buat', 'tab_guide': 'Panduan',
+        'guide_preview_title': 'Pratinjau', 'guide_preview_desc': 'Ikon Anda akan muncul di tab browser.',
+        'step1_title': 'Unggah', 'step1_desc': 'Unggah favicon.ico ke direktori root.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Kode HTML', 'step2_desc': 'Tempel kode ini di bagian <head>.',
+        'guide_copy_btn': 'Salin', 'guide_copied': 'Disalin!'
     },
 
-    # --- 土耳其语 ---
+    # --- Türkçe (土耳其语) ---
     'tr': {
-        **EN_GUIDE,
         'name': 'Türkçe', 'dir': 'ltr', 'recommend': 'Önerilen', 'badge': 'POP',
-        'seo_title': 'Online ICO Dönüştürücü - Favicon Yapma',
-        'seo_desc': 'Resimleri ICO formatına çevirin. Profesyonel araç.',
-        'keywords': 'ico dönüştürücü, favicon yapma, png to ico',
+        'seo_title': 'ICO Dönüştürücü', 'seo_desc': 'Favicon yapma.',
+        'keywords': 'ico dönüştürücü, favicon',
         'h1': 'ICO Dönüştürücü', 'subtitle': 'Favicon Oluşturucu', 'upload_label': 'Dosya yükle',
-        'size_label': 'Boyut', 'btn_submit': 'İndir', 'footer': 'Gizlilik korumalı.', 'error_large': 'Dosya çok büyük'
+        'size_label': 'Boyut', 'btn_submit': 'İndir', 'footer': 'Gizlilik korumalı.', 'error_large': 'Dosya çok büyük',
+        # Guide
+        'tab_create': 'Oluştur', 'tab_guide': 'Rehber',
+        'guide_preview_title': 'Önizleme', 'guide_preview_desc': 'Simgeniz tarayıcı sekmelerinde görünecektir.',
+        'step1_title': 'Yükle', 'step1_desc': 'favicon.ico dosyasını kök dizine yükleyin.', 'step1_file_path': '/kök/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML Kodu', 'step2_desc': 'Bu kodu <head> bölümüne yapıştırın.',
+        'guide_copy_btn': 'Kopyala', 'guide_copied': 'Kopyalandı!'
     },
 
-    # --- 越南语 ---
+    # --- Tiếng Việt (越南语) ---
     'vi': {
-        **EN_GUIDE,
         'name': 'Tiếng Việt', 'dir': 'ltr', 'recommend': 'Đề xuất', 'badge': 'HOT',
-        'seo_title': 'Chuyển đổi ICO Trực tuyến - Tạo Favicon',
-        'seo_desc': 'Chuyển đổi ảnh sang ICO miễn phí. Công cụ chuyên nghiệp.',
-        'keywords': 'chuyển đổi ico, tạo favicon, png sang ico',
+        'seo_title': 'Chuyển đổi ICO', 'seo_desc': 'Tạo Favicon.',
+        'keywords': 'chuyển đổi ico, favicon',
         'h1': 'Chuyển đổi ICO', 'subtitle': 'Tạo Favicon', 'upload_label': 'Tải lên',
-        'size_label': 'Kích thước', 'btn_submit': 'Tải xuống', 'footer': 'Bảo mật riêng tư.', 'error_large': 'Tệp quá lớn'
+        'size_label': 'Kích thước', 'btn_submit': 'Tải xuống', 'footer': 'Bảo mật riêng tư.', 'error_large': 'Tệp quá lớn',
+        # Guide
+        'tab_create': 'Tạo', 'tab_guide': 'Hướng dẫn',
+        'guide_preview_title': 'Xem trước', 'guide_preview_desc': 'Biểu tượng sẽ xuất hiện trên các tab trình duyệt.',
+        'step1_title': 'Tải lên', 'step1_desc': 'Tải tệp favicon.ico lên thư mục gốc.', 'step1_file_path': '/gốc/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'Mã HTML', 'step2_desc': 'Dán mã này vào phần <head>.',
+        'guide_copy_btn': 'Sao chép', 'guide_copied': 'Đã sao chép!'
     },
 
-    # --- 泰语 ---
+    # --- ไทย (泰语) ---
     'th': {
-        **EN_GUIDE,
         'name': 'ไทย', 'dir': 'ltr', 'recommend': 'แนะนำ', 'badge': 'ฮิต',
-        'seo_title': 'แปลงไฟล์ ICO ออนไลน์ - สร้าง Favicon',
-        'seo_desc': 'แปลงรูปภาพเป็น ICO ฟรี เครื่องมือระดับมืออาชีพ',
-        'keywords': 'แปลงไฟล์ ico, สร้าง favicon, png เป็น ico',
+        'seo_title': 'ตัวแปลง ICO', 'seo_desc': 'สร้าง Favicon.',
+        'keywords': 'แปลงไฟล์ ico, favicon',
         'h1': 'ตัวแปลง ICO', 'subtitle': 'สร้าง Favicon', 'upload_label': 'อัปโหลด',
-        'size_label': 'ขนาด', 'btn_submit': 'ดาวน์โหลด', 'footer': 'ความเป็นส่วนตัว', 'error_large': 'ไฟล์ใหญ่เกินไป'
+        'size_label': 'ขนาด', 'btn_submit': 'ดาวน์โหลด', 'footer': 'ความเป็นส่วนตัว', 'error_large': 'ไฟล์ใหญ่เกินไป',
+        # Guide
+        'tab_create': 'สร้าง', 'tab_guide': 'คู่มือ',
+        'guide_preview_title': 'ตัวอย่าง', 'guide_preview_desc': 'ไอคอนของคุณจะแสดงในแท็บเบราว์เซอร์',
+        'step1_title': 'อัปโหลด', 'step1_desc': 'อัปโหลด favicon.ico ไปยังไดเรกทอรีราก', 'step1_file_path': '/ราก/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'รหัส HTML', 'step2_desc': 'วางรหัสนี้ในส่วน <head>',
+        'guide_copy_btn': 'คัดลอก', 'guide_copied': 'คัดลอกแล้ว!'
     },
 
-    # --- 印地语 ---
+    # --- हिन्दी (印地语) ---
     'hi': {
-        **EN_GUIDE,
         'name': 'हिन्दी', 'dir': 'ltr', 'recommend': 'अनुशंसित', 'badge': 'आम',
-        'seo_title': 'ICO कन्वर्टर - Favicon बनाएं',
-        'seo_desc': 'छवियों को ICO में बदलें। पेशेवर उपकरण।',
-        'keywords': 'ico converter, favicon generator, hindi',
+        'seo_title': 'ICO कन्वर्टर', 'seo_desc': 'Favicon बनाएं.',
+        'keywords': 'ico converter, favicon',
         'h1': 'ICO कन्वर्टर', 'subtitle': 'Favicon जनरेटर', 'upload_label': 'अपलोड करें',
-        'size_label': 'आकार', 'btn_submit': 'डाउनलोड करें', 'footer': 'गोपनीयता', 'error_large': 'फ़ाइल बहुत बड़ी है'
+        'size_label': 'आकार', 'btn_submit': 'डाउनलोड करें', 'footer': 'गोपनीयता', 'error_large': 'फ़ाइल बहुत बड़ी है',
+        # Guide
+        'tab_create': 'बनाएं', 'tab_guide': 'गाइड',
+        'guide_preview_title': 'पूर्वावलोकन', 'guide_preview_desc': 'आपका आइकन ब्राउज़र टैब में दिखाई देगा।',
+        'step1_title': 'अपलोड', 'step1_desc': 'favicon.ico को रूट डायरेक्टरी में अपलोड करें।', 'step1_file_path': '/रूट/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML कोड', 'step2_desc': 'इस कोड को <head> सेक्शन में पेस्ट करें।',
+        'guide_copy_btn': 'कॉपी', 'guide_copied': 'कॉपी किया!'
     },
 
-    # --- 瑞典语 ---
+    # --- Svenska (瑞典语) ---
     'sv': {
-        **EN_GUIDE,
-        'name': 'Svenska', 'dir': 'ltr', 'recommend': 'Rekommenderas', 'badge': 'TOP',
-        'seo_title': 'Online ICO Konverterare - Skapa Favicon',
-        'seo_desc': 'Konvertera bilder till ICO. Professionellt verktyg.',
-        'keywords': 'ico konverterare, skapa favicon, png till ico',
+        'name': 'Svenska', 'dir': 'ltr', 'recommend': 'Standard', 'badge': 'TOP',
+        'seo_title': 'ICO Konverterare', 'seo_desc': 'Skapa Favicon.',
+        'keywords': 'ico konverterare, favicon',
         'h1': 'ICO Konverterare', 'subtitle': 'Favicon Generator', 'upload_label': 'Ladda upp',
-        'size_label': 'Storlek', 'btn_submit': 'Ladda ner', 'footer': 'Integritetsskyddad.', 'error_large': 'Filen är för stor'
+        'size_label': 'Storlek', 'btn_submit': 'Ladda ner', 'footer': 'Integritetsskyddad.', 'error_large': 'Filen är för stor',
+        # Guide
+        'tab_create': 'Skapa', 'tab_guide': 'Guide',
+        'guide_preview_title': 'Förhandsvisning', 'guide_preview_desc': 'Din ikon kommer att visas i webbläsarflikarna.',
+        'step1_title': 'Ladda upp', 'step1_desc': 'Ladda upp favicon.ico till rotkatalogen.', 'step1_file_path': '/rot/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML-kod', 'step2_desc': 'Klistra in denna kod i <head>-sektionen.',
+        'guide_copy_btn': 'Kopiera', 'guide_copied': 'Kopierad!'
     },
 
-    # --- 乌克兰语 ---
+    # --- Українська (乌克兰语) ---
     'uk': {
-        **EN_GUIDE,
         'name': 'Українська', 'dir': 'ltr', 'recommend': 'Стандарт', 'badge': 'ХІТ',
-        'seo_title': 'Онлайн конвертер ICO - Створити Favicon',
-        'seo_desc': 'Конвертувати зображення в ICO. Професійний інструмент.',
-        'keywords': 'конвертер ico, створити favicon, png в ico',
+        'seo_title': 'Конвертер ICO', 'seo_desc': 'Створити Favicon.',
+        'keywords': 'ico конвертер, favicon',
         'h1': 'Конвертер ICO', 'subtitle': 'Генератор іконок', 'upload_label': 'Завантажити',
-        'size_label': 'Розмір', 'btn_submit': 'Завантажити', 'footer': 'Конфіденційність.', 'error_large': 'Файл занадто великий'
+        'size_label': 'Розмір', 'btn_submit': 'Завантажити', 'footer': 'Конфіденційність.', 'error_large': 'Файл занадто великий',
+        # Guide
+        'tab_create': 'Створити', 'tab_guide': 'Інструкція',
+        'guide_preview_title': 'Перегляд', 'guide_preview_desc': 'Ваша іконка з\'явиться на вкладках браузера.',
+        'step1_title': 'Завантажити', 'step1_desc': 'Завантажте favicon.ico в кореневий каталог.', 'step1_file_path': '/root/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'HTML код', 'step2_desc': 'Вставте цей код у розділ <head>.',
+        'guide_copy_btn': 'Копія', 'guide_copied': 'Скопійовано!'
     },
 
-    # --- 阿拉伯语 ---
+    # --- العربية (阿拉伯语 - RTL) ---
     'ar': {
-        **EN_GUIDE,
         'name': 'العربية', 'dir': 'rtl', 'recommend': 'موصى به', 'badge': 'شائع',
-        'seo_title': 'محول ICO عبر الإنترنت - إنشاء أيقونة Favicon',
-        'seo_desc': 'تحويل الصور إلى صيغة ICO مجاناً. أداة احترافية.',
-        'keywords': 'محول ico, انشاء favicon, تحويل الصور الى ايقونات',
+        'seo_title': 'محول ICO', 'seo_desc': 'إنشاء أيقونة.',
+        'keywords': 'محول ico, favicon',
         'h1': 'محول ICO', 'subtitle': 'مولد أيقونات', 'upload_label': 'رفع صورة',
-        'size_label': 'الحجم', 'btn_submit': 'تحميل .ICO', 'footer': 'حماية الخصوصية.', 'error_large': 'الملف كبير جداً'
+        'size_label': 'الحجم', 'btn_submit': 'تحميل .ICO', 'footer': 'حماية الخصوصية.', 'error_large': 'الملف كبير جداً',
+        # Guide
+        'tab_create': 'إنشاء', 'tab_guide': 'دليل',
+        'guide_preview_title': 'معاينة', 'guide_preview_desc': 'سيظهر الرمز الخاص بك في علامات تبويب المتصفح.',
+        'step1_title': 'رفع', 'step1_desc': 'ارفع favicon.ico إلى الدليل الجذر.', 'step1_file_path': '/جذر/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'كود HTML', 'step2_desc': 'الصق هذا الكود في قسم <head>.',
+        'guide_copy_btn': 'نسخ', 'guide_copied': 'تم النسخ!'
     },
 
-    # --- 希伯来语 ---
+    # --- עברית (希伯来语 - RTL) ---
     'he': {
-        **EN_GUIDE,
         'name': 'עברית', 'dir': 'rtl', 'recommend': 'מומלץ', 'badge': 'נפוץ',
-        'seo_title': 'ממיר ICO מקוון - צור Favicon',
-        'seo_desc': 'המרת תמונות ל-ICO בחינם. כלי מקצועי.',
-        'keywords': 'ממיר ico, יצירת favicon, המרת תמונה לאייקון',
+        'seo_title': 'ממיר ICO', 'seo_desc': 'צור Favicon.',
+        'keywords': 'ממיר ico, favicon',
         'h1': 'ממיר ICO', 'subtitle': 'יוצר אייקונים', 'upload_label': 'העלאת תמונה',
-        'size_label': 'גודל', 'btn_submit': 'הורד .ICO', 'footer': 'פרטיות מוגנת.', 'error_large': 'קובץ גדול מדי'
+        'size_label': 'גודל', 'btn_submit': 'הורד .ICO', 'footer': 'פרטיות מוגנת.', 'error_large': 'קובץ גדול מדי',
+        # Guide
+        'tab_create': 'צור', 'tab_guide': 'מדריך',
+        'guide_preview_title': 'תצוגה מקדימה', 'guide_preview_desc': 'האייקון שלך יופיע בכרטיסיות הדפדפן.',
+        'step1_title': 'העלאה', 'step1_desc': 'העלה את favicon.ico לתיקיית השורש.', 'step1_file_path': '/שורש/', 'step1_file_name': 'favicon.ico',
+        'step2_title': 'קוד HTML', 'step2_desc': 'הדבק את הקוד הזה בתוך ה-<head>.',
+        'guide_copy_btn': 'העתק', 'guide_copied': 'הועתק!'
     }
 }
 
@@ -288,7 +356,7 @@ SUPPORTED_LANGS = list(TRANSLATIONS.keys())
 DEFAULT_LANG = 'en'
 
 # ==========================================
-# 3. 路由与核心逻辑
+# 3. 路由逻辑
 # ==========================================
 
 def render_index(lang_code):
@@ -337,40 +405,22 @@ def generate_ico():
         print(f"Error: {str(e)}")
         return "Invalid image file", 500
 
-# SEO: Robots.txt
-@app.route('/robots.txt')
-def robots():
-    base_url = request.url_root.rstrip('/')
-    lines = [
-        "User-agent: *",
-        "Allow: /",
-        "Disallow: /generate",
-        f"Sitemap: {base_url}/sitemap.xml"
-    ]
-    return Response("\n".join(lines), mimetype="text/plain")
-
-# SEO: Sitemap.xml
 @app.route('/sitemap.xml')
 def sitemap():
     base_url = request.url_root.rstrip('/')
     urls = []
     today = datetime.date.today().isoformat()
     for lang in SUPPORTED_LANGS:
-        urls.append(f"""
-        <url>
-            <loc>{base_url}/{lang}</loc>
-            <lastmod>{today}</lastmod>
-            <changefreq>weekly</changefreq>
-            <priority>{'1.0' if lang == 'en' else '0.8'}</priority>
-        </url>""")
-
-    xml = f"""<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-        {''.join(urls)}
-    </urlset>"""
+        urls.append(f"""<url><loc>{base_url}/{lang}</loc><lastmod>{today}</lastmod><changefreq>weekly</changefreq><priority>{'1.0' if lang == 'en' else '0.8'}</priority></url>""")
+    xml = f"""<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{''.join(urls)}</urlset>"""
     return Response(xml, mimetype="application/xml")
 
-# Favicon: 读取本地文件
+@app.route('/robots.txt')
+def robots():
+    base_url = request.url_root.rstrip('/')
+    lines = ["User-agent: *", "Allow: /", "Disallow: /generate", f"Sitemap: {base_url}/sitemap.xml"]
+    return Response("\n".join(lines), mimetype="text/plain")
+
 @app.route('/favicon.ico')
 def favicon():
     return send_file('../favicon.ico', mimetype='image/vnd.microsoft.icon')
