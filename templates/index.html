@@ -28,21 +28,16 @@
         }
       }
       .animate-fade-in {
-        animation: fade-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        animation: fade-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
 
-      .lang-scroll::-webkit-scrollbar {
-        width: 4px;
+      /* 强制隐藏滚动条，但保留滚动功能 (双重保险) */
+      .scrollbar-hide::-webkit-scrollbar {
+        display: none;
       }
-      .lang-scroll::-webkit-scrollbar-track {
-        background: transparent;
-      }
-      .lang-scroll::-webkit-scrollbar-thumb {
-        background: #e5e7eb;
-        border-radius: 4px;
-      }
-      .lang-scroll::-webkit-scrollbar-thumb:hover {
-        background: #d1d5db;
+      .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
       }
 
       html[dir='rtl'] body {
@@ -83,7 +78,7 @@
             id="lang-menu"
             class="hidden absolute left-0 top-8 w-72 bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden transform origin-top-left z-50"
           >
-            <div class="grid grid-cols-2 gap-1 p-2 max-h-64 overflow-y-auto lang-scroll">
+            <div class="grid grid-cols-2 gap-1 p-2 max-h-64 overflow-y-auto scrollbar-hide">
               {% if alternates %} {% for alt in alternates %}
               <a
                 href="{{ alt.href }}"
@@ -247,51 +242,47 @@
 
         <div
           id="view-guide"
-          class="hidden flex-col h-full p-8 pt-4 animate-fade-in justify-center overflow-y-auto scrollbar-hide"
+          class="hidden flex-col h-full px-6 py-4 animate-fade-in justify-center overflow-y-auto scrollbar-hide"
         >
-          <div class="relative pl-4 border-l-2 border-dashed border-gray-200 ml-3 space-y-8">
+          <div class="relative pl-4 border-l-2 border-dashed border-gray-200 ml-3 space-y-4">
             <div class="relative">
               <div
                 class="absolute -left-[21px] top-0 w-3 h-3 bg-green-200 rounded-full border-2 border-white"
               ></div>
 
-              <div class="mb-3">
+              <div class="mb-2">
                 <h3 class="text-sm font-bold text-gray-800">{{ t.guide_preview_title }}</h3>
-                <p class="text-[10px] text-gray-400 mt-0.5">{{ t.guide_preview_desc }}</p>
+                <p class="text-[10px] text-gray-400 mt-0.5 leading-tight">
+                  {{ t.guide_preview_desc }}
+                </p>
               </div>
 
               <div
-                class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 group hover:border-green-300 transition-colors duration-300"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl p-2 group hover:border-green-300 transition-colors duration-300"
               >
-                <div class="flex items-center gap-1.5 mb-3 px-1">
+                <div class="flex items-center gap-1.5 mb-2 px-1">
                   <div
-                    class="w-2.5 h-2.5 rounded-full bg-gray-300 group-hover:bg-red-400 transition-colors"
+                    class="w-2 h-2 rounded-full bg-gray-300 group-hover:bg-red-400 transition-colors"
                   ></div>
                   <div
-                    class="w-2.5 h-2.5 rounded-full bg-gray-300 group-hover:bg-yellow-400 transition-colors"
+                    class="w-2 h-2 rounded-full bg-gray-300 group-hover:bg-yellow-400 transition-colors"
                   ></div>
                   <div
-                    class="w-2.5 h-2.5 rounded-full bg-gray-300 group-hover:bg-green-400 transition-colors"
+                    class="w-2 h-2 rounded-full bg-gray-300 group-hover:bg-green-400 transition-colors"
                   ></div>
                 </div>
-
                 <div
-                  class="bg-white border border-gray-200 rounded-lg p-2 flex items-center gap-3 shadow-sm"
+                  class="bg-white border border-gray-200 rounded-lg p-1.5 flex items-center gap-2 shadow-sm"
                 >
                   <div
-                    class="relative flex items-center justify-center w-8 h-8 bg-gray-50 rounded border border-gray-100 shrink-0"
+                    class="relative flex items-center justify-center w-6 h-6 bg-gray-50 rounded border border-gray-100 shrink-0"
                   >
-                    <img src="/favicon.ico?v=7" class="w-4 h-4 animate-pulse" />
+                    <img src="/favicon.ico?v=7" class="w-3 h-3 animate-pulse" />
                   </div>
-                  <div class="flex-1 space-y-1.5">
-                    <div class="h-1.5 w-3/4 bg-gray-100 rounded-full"></div>
-                    <div class="h-1.5 w-1/2 bg-gray-50 rounded-full"></div>
+                  <div class="flex-1 space-y-1">
+                    <div class="h-1 w-3/4 bg-gray-100 rounded-full"></div>
+                    <div class="h-1 w-1/2 bg-gray-50 rounded-full"></div>
                   </div>
-                </div>
-
-                <div class="mt-3 space-y-2 opacity-30 px-1">
-                  <div class="h-2 w-full bg-gray-200 rounded-full"></div>
-                  <div class="h-2 w-5/6 bg-gray-200 rounded-full"></div>
                 </div>
               </div>
             </div>
@@ -303,26 +294,26 @@
 
               <div class="mb-2">
                 <h3 class="text-sm font-bold text-gray-800">{{ t.step1_title }}</h3>
-                <p class="text-[10px] text-gray-400 mt-0.5">{{ t.step1_desc }}</p>
+                <p class="text-[10px] text-gray-400 mt-0.5 leading-tight">{{ t.step1_desc }}</p>
               </div>
 
               <div
-                class="w-full bg-gray-50 border border-gray-100 rounded-xl p-3 flex items-center justify-between group hover:border-green-200 transition-colors"
+                class="w-full bg-gray-50 border border-gray-100 rounded-xl p-2.5 flex items-center justify-between group hover:border-green-200 transition-colors"
               >
                 <div class="flex items-center gap-3">
                   <div class="bg-white p-1.5 rounded-md shadow-sm border border-gray-100">
-                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
                       <path
                         d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
                       ></path>
                     </svg>
                   </div>
                   <div class="flex flex-col">
-                    <span class="text-[10px] text-gray-400 font-mono leading-none mb-0.5"
+                    <span class="text-[9px] text-gray-400 font-mono leading-none mb-0.5"
                       >{{ t.step1_file_path }}</span
                     >
                     <span
-                      class="text-xs text-green-700 font-bold font-mono bg-green-100/50 px-1 rounded -ml-1"
+                      class="text-[11px] text-green-700 font-bold font-mono bg-green-100/50 px-1 rounded -ml-1"
                       >{{ t.step1_file_name }}</span
                     >
                   </div>
@@ -342,11 +333,11 @@
 
               <div class="mb-2">
                 <h3 class="text-sm font-bold text-gray-800">{{ t.step2_title }}</h3>
-                <p class="text-[10px] text-gray-400 mt-0.5">{{ t.step2_desc }}</p>
+                <p class="text-[10px] text-gray-400 mt-0.5 leading-tight">{{ t.step2_desc }}</p>
               </div>
 
               <div
-                class="w-full bg-[#1e293b] rounded-xl p-4 shadow-lg relative group overflow-hidden"
+                class="w-full bg-[#1e293b] rounded-xl p-3 shadow-lg relative group overflow-hidden"
               >
                 <code class="font-mono text-[10px] text-slate-300 block leading-relaxed">
                   <span class="opacity-50">&lt;head&gt;</span><br />
@@ -357,7 +348,7 @@
                 </code>
                 <button
                   onclick="copyCode(this)"
-                  class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] px-2.5 py-1 rounded transition-all backdrop-blur-md border border-white/5 font-medium flex items-center gap-1 opacity-80 hover:opacity-100"
+                  class="absolute top-2 right-2 bg-white/10 hover:bg-white/20 text-white text-[10px] px-2 py-1 rounded transition-all backdrop-blur-md border border-white/5 font-medium flex items-center gap-1 opacity-80 hover:opacity-100"
                 >
                   {{ t.guide_copy_btn }}
                 </button>
