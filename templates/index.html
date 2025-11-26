@@ -17,11 +17,10 @@
 
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-      /* 优化动画曲线，更顺滑 */
       @keyframes fade-in {
         from {
           opacity: 0;
-          transform: scale(0.98) translateY(5px);
+          transform: scale(0.99) translateY(4px);
         }
         to {
           opacity: 1;
@@ -29,10 +28,9 @@
         }
       }
       .animate-fade-in {
-        animation: fade-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        animation: fade-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
 
-      /* 滚动条样式 */
       .lang-scroll::-webkit-scrollbar {
         width: 4px;
       }
@@ -59,7 +57,7 @@
     <div
       class="relative bg-white w-full max-w-md rounded-2xl shadow-2xl border-t-4 border-green-500 z-10 flex flex-col h-[600px] transition-all duration-300"
     >
-      <div class="px-6 pt-6 pb-2 flex items-center justify-between shrink-0 z-30">
+      <div class="px-6 pt-6 pb-0 flex items-center justify-between shrink-0 z-30">
         <div class="relative">
           <button
             id="lang-btn"
@@ -116,16 +114,13 @@
         </div>
       </div>
 
-      <div class="relative flex-1 overflow-hidden">
-        <div
-          id="view-create"
-          class="flex flex-col h-full animate-fade-in overflow-y-auto scrollbar-hide"
-        >
-          <div class="p-6 text-center shrink-0">
+      <div class="relative flex-1 overflow-hidden flex flex-col">
+        <div id="view-create" class="flex flex-col h-full animate-fade-in">
+          <div class="p-5 text-center shrink-0">
             <div
-              class="inline-flex items-center justify-center w-14 h-14 bg-green-50 text-green-600 rounded-2xl mb-3 shadow-sm ring-4 ring-white"
+              class="inline-flex items-center justify-center w-12 h-12 bg-green-50 text-green-600 rounded-2xl mb-2 shadow-sm ring-4 ring-white"
             >
-              <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -134,19 +129,21 @@
                 ></path>
               </svg>
             </div>
-            <h1 class="text-2xl font-black text-gray-800 tracking-tight">{{ t.h1 }}</h1>
-            <p class="text-gray-400 mt-1 text-xs font-medium">{{ t.subtitle }}</p>
+            <h1 class="text-xl font-black text-gray-800 tracking-tight">{{ t.h1 }}</h1>
+            <p class="text-gray-400 text-[10px] font-medium uppercase tracking-wide">
+              {{ t.subtitle }}
+            </p>
           </div>
 
           <form
             action="/generate"
             method="POST"
             enctype="multipart/form-data"
-            class="px-8 pb-8 space-y-5 flex-1 flex flex-col justify-center"
+            class="px-6 pb-6 flex-1 flex flex-col justify-between"
           >
-            <div class="relative group grow-0">
+            <div class="relative group shrink-0">
               <div
-                class="border-2 border-dashed border-gray-200 rounded-2xl p-4 text-center transition-all duration-300 group-hover:border-green-500 group-hover:bg-green-50/50 cursor-pointer relative h-28 flex flex-col items-center justify-center"
+                class="border-2 border-dashed border-gray-200 rounded-2xl text-center transition-all duration-300 group-hover:border-green-500 group-hover:bg-green-50/50 cursor-pointer relative h-28 flex flex-col items-center justify-center"
               >
                 <div
                   class="text-gray-300 group-hover:text-green-600 transition-colors pointer-events-none"
@@ -179,7 +176,7 @@
               </div>
             </div>
 
-            <div class="grow-0">
+            <div class="shrink-0 py-2">
               <label
                 class="block text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-2 ml-1"
                 >{{ t.size_label }}</label
@@ -200,9 +197,10 @@
                   >
                     32 x 32
                     <span
-                      class="absolute -top-2.5 -right-2 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-lg shadow-green-500/30 transform scale-100 z-10 font-bold tracking-wide"
-                      >{{ t.badge }}</span
+                      class="absolute -top-2.5 -right-2 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-lg shadow-green-500/30 transform scale-100 z-10 font-bold tracking-wide whitespace-nowrap"
                     >
+                      {{ t.badge }}
+                    </span>
                   </div>
                 </label>
                 <label class="cursor-pointer relative group">
@@ -224,7 +222,7 @@
               </div>
             </div>
 
-            <div class="grow-0 pt-2">
+            <div class="shrink-0">
               <button
                 type="submit"
                 class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-600/30 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 rtl:flex-row-reverse"
@@ -248,18 +246,15 @@
           </form>
         </div>
 
-        <div
-          id="view-guide"
-          class="hidden flex-col h-full p-8 animate-fade-in justify-center overflow-y-auto scrollbar-hide"
-        >
-          <div class="w-full space-y-8">
+        <div id="view-guide" class="hidden flex-col h-full p-8 pt-0 animate-fade-in justify-center">
+          <div class="w-full space-y-6">
             <div
-              class="w-full bg-gray-50 rounded-2xl p-6 border border-dashed border-gray-200 group hover:border-green-300 transition-colors duration-300"
+              class="w-full bg-gray-50 rounded-2xl p-5 border border-dashed border-gray-200 group hover:border-green-300 transition-colors duration-300"
             >
               <div
-                class="bg-white rounded-lg shadow-md border border-gray-100 p-4 relative mx-auto max-w-[220px] transform group-hover:scale-105 transition-transform duration-300"
+                class="bg-white rounded-lg shadow-md border border-gray-100 p-3 relative mx-auto max-w-[200px] transform group-hover:scale-105 transition-transform duration-300"
               >
-                <div class="flex items-center gap-2 border-b border-gray-100 pb-3 mb-3">
+                <div class="flex items-center gap-2 border-b border-gray-100 pb-2 mb-2">
                   <div class="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-md">
                     <img src="/favicon.ico?v=7" class="w-3.5 h-3.5 animate-pulse" />
                     <div class="h-1.5 w-16 bg-gray-300 rounded-full"></div>
@@ -271,11 +266,11 @@
                   <div class="h-2 w-3/4 bg-gray-200 rounded-full"></div>
                 </div>
               </div>
-              <div class="mt-6 text-center">
+              <div class="mt-4 text-center">
                 <h3 class="text-xs font-bold text-gray-800 uppercase tracking-wider">
                   {{ t.guide_what_title }}
                 </h3>
-                <p class="text-[10px] text-gray-400 mt-1 max-w-[200px] mx-auto">
+                <p class="text-[10px] text-gray-400 mt-1 max-w-[200px] mx-auto leading-relaxed">
                   {{ t.guide_what_desc }}
                 </p>
               </div>
@@ -283,7 +278,7 @@
 
             <div class="w-full text-left relative group">
               <div class="bg-[#1e293b] rounded-xl p-5 shadow-xl relative overflow-hidden">
-                <div class="flex gap-1.5 mb-4 opacity-60">
+                <div class="flex gap-1.5 mb-3 opacity-60">
                   <div class="w-2.5 h-2.5 rounded-full bg-red-500"></div>
                   <div class="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
                   <div class="w-2.5 h-2.5 rounded-full bg-green-500"></div>
@@ -344,7 +339,6 @@
         const btnCreate = document.getElementById('btn-create')
         const btnGuide = document.getElementById('btn-guide')
 
-        // 动画重置
         createView.classList.remove('animate-fade-in')
         guideView.classList.remove('animate-fade-in')
         void createView.offsetWidth
@@ -357,14 +351,11 @@
           'scale-95',
         ]
 
-        // 暴力切换逻辑：确保只有一个 view 存在于文档流中，彻底解决高度塌陷/撑开问题
         if (tab === 'create') {
           createView.classList.remove('hidden')
           createView.classList.add('flex', 'animate-fade-in')
-
           guideView.classList.add('hidden')
           guideView.classList.remove('flex')
-
           btnCreate.classList.add(...activeClass)
           btnCreate.classList.remove(...inactiveClass)
           btnGuide.classList.remove(...activeClass)
@@ -372,10 +363,8 @@
         } else {
           guideView.classList.remove('hidden')
           guideView.classList.add('flex', 'animate-fade-in')
-
           createView.classList.add('hidden')
           createView.classList.remove('flex')
-
           btnGuide.classList.add(...activeClass)
           btnGuide.classList.remove(...inactiveClass)
           btnCreate.classList.remove(...activeClass)
@@ -387,7 +376,6 @@
         e.stopPropagation()
         document.getElementById('lang-menu').classList.toggle('hidden')
       }
-
       function closeLangMenu(e) {
         const menu = document.getElementById('lang-menu')
         const btn = document.getElementById('lang-btn')
@@ -398,7 +386,6 @@
         )
           menu.classList.add('hidden')
       }
-
       function handleFileSelect(input) {
         if (input.files && input.files[0]) {
           const file = input.files[0]
@@ -411,7 +398,6 @@
           document.getElementById('file-label').classList.add('text-green-700', 'font-bold')
         }
       }
-
       function copyCode(btn) {
         const code = '<link rel="icon" href="favicon.ico" />'
         navigator.clipboard.writeText(code).then(() => {
