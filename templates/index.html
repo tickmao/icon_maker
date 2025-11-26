@@ -63,7 +63,7 @@
         }
       }
       .animate-fade-in {
-        animation: fade-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+        animation: fade-in 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
 
       .scrollbar-hide::-webkit-scrollbar {
@@ -78,11 +78,11 @@
       .faq-content {
         max-height: 0;
         overflow: hidden;
-        transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease-in-out;
+        transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
         opacity: 0;
       }
       .faq-open .faq-content {
-        max-height: 200px;
+        max-height: 300px;
         opacity: 1;
       }
       .faq-icon {
@@ -94,23 +94,24 @@
 
       .drag-active {
         border-color: #22c55e !important;
-        background-color: rgba(34, 197, 94, 0.1) !important;
-        transform: scale(1.02);
+        background-color: rgba(34, 197, 94, 0.05) !important;
+        transform: scale(1.01);
       }
       .dark .drag-active {
-        background-color: rgba(34, 197, 94, 0.2) !important;
+        background-color: rgba(34, 197, 94, 0.15) !important;
       }
       html[dir='rtl'] body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       }
 
+      /* 极光背景 - 更加柔和 */
       .aurora-bg {
-        background-color: #f8fafc;
-        background-image: radial-gradient(at 0% 0%, rgba(74, 222, 128, 0.15) 0px, transparent 50%),
-          radial-gradient(at 100% 100%, rgba(34, 197, 94, 0.1) 0px, transparent 50%);
+        background-color: #f8fafc; /* Slate-50 */
+        background-image: radial-gradient(at 0% 0%, rgba(187, 247, 208, 0.4) 0px, transparent 50%),
+          radial-gradient(at 100% 100%, rgba(187, 247, 208, 0.3) 0px, transparent 50%);
       }
       .dark .aurora-bg {
-        background-color: #020617;
+        background-color: #020617; /* Slate-950 */
         background-image: radial-gradient(at 0% 0%, rgba(22, 163, 74, 0.15) 0px, transparent 50%),
           radial-gradient(at 100% 100%, rgba(22, 163, 74, 0.1) 0px, transparent 50%);
       }
@@ -130,7 +131,7 @@
     ></noscript>
 
     <div
-      class="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl shadow-xl dark:shadow-2xl dark:shadow-black/50 border-t-4 border-green-500 dark:border-green-600 z-10 flex flex-col h-[600px] transition-all duration-300 mb-8 mt-8 ring-1 ring-gray-900/5 dark:ring-white/10"
+      class="relative bg-white dark:bg-slate-800 w-full max-w-md rounded-2xl z-10 flex flex-col h-[600px] transition-all duration-300 mb-8 mt-8 border-t-4 border-green-500 dark:border-green-500 shadow-[0_8px_30px_rgb(0,0,0,0.04)] border-x border-b border-gray-100 dark:border-none dark:ring-1 dark:ring-white/10 dark:shadow-2xl dark:shadow-black/40"
     >
       <div class="px-6 pt-6 pb-0 flex items-center justify-between shrink-0 z-30">
         <div class="flex items-center gap-3">
@@ -138,7 +139,7 @@
             <button
               id="lang-btn"
               onclick="toggleLangMenu(event)"
-              class="flex items-center gap-1.5 px-2 py-1 bg-gray-50 dark:bg-slate-900/60 border border-gray-100 dark:border-slate-700 rounded-lg text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 uppercase tracking-wide transition-colors focus:outline-none shadow-sm backdrop-blur-sm"
+              class="flex items-center gap-1.5 px-2 py-1 bg-gray-50 dark:bg-slate-700/50 border border-gray-200/60 dark:border-slate-600/50 rounded-lg text-xs font-bold text-gray-500 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 uppercase tracking-wide transition-colors focus:outline-none shadow-sm hover:border-green-200 dark:hover:border-green-800"
             >
               <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -152,13 +153,13 @@
             </button>
             <div
               id="lang-menu"
-              class="hidden absolute left-0 top-9 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-xl border border-gray-100 dark:border-slate-600 overflow-hidden transform origin-top-left z-50"
+              class="hidden absolute left-0 top-9 w-72 bg-white dark:bg-slate-800 rounded-xl shadow-lg dark:shadow-2xl border border-gray-100 dark:border-slate-700 overflow-hidden transform origin-top-left z-50 ring-1 ring-black/5"
             >
               <div class="grid grid-cols-2 gap-1 p-2 max-h-64 overflow-y-auto scrollbar-hide">
                 {% if alternates %} {% for alt in alternates %}
                 <a
                   href="{{ alt.href }}"
-                  class="flex items-center px-3 py-2 text-xs rounded-lg transition-all {% if alt.lang == current_lang %} font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/30 {% else %} text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700 {% endif %}"
+                  class="flex items-center px-3 py-2 text-xs rounded-lg transition-all {% if alt.lang == current_lang %} font-bold text-green-700 dark:text-green-400 bg-green-50 dark:bg-green-900/20 {% else %} text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-700/50 {% endif %}"
                 >
                   {{ alt.name }}
                 </a>
@@ -167,10 +168,11 @@
             </div>
           </div>
 
-          <div class="w-px h-4 bg-gray-300 dark:bg-slate-600 mx-1"></div>
+          <div class="w-px h-4 bg-gray-200 dark:bg-slate-700 mx-1"></div>
+
           <button
             onclick="toggleTheme()"
-            class="p-1.5 text-gray-400 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-300 transition-colors focus:outline-none rounded-md hover:bg-gray-100 dark:hover:bg-slate-700"
+            class="p-1.5 text-gray-400 dark:text-gray-400 hover:text-yellow-500 dark:hover:text-yellow-300 transition-colors focus:outline-none rounded-md hover:bg-gray-50 dark:hover:bg-slate-700/50"
           >
             <svg
               id="icon-sun"
@@ -204,19 +206,19 @@
         </div>
 
         <div
-          class="flex bg-gray-100/80 dark:bg-slate-900/50 p-1 rounded-lg backdrop-blur-sm border border-transparent dark:border-slate-700"
+          class="flex bg-gray-100/60 dark:bg-slate-900/50 p-1 rounded-lg backdrop-blur-sm border border-gray-200/50 dark:border-slate-700/50"
         >
           <button
             onclick="switchTab('create')"
             id="btn-create"
-            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 shadow-sm bg-white dark:bg-slate-700 text-gray-800 dark:text-white scale-100"
+            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 shadow-sm bg-white dark:bg-slate-700 text-gray-800 dark:text-white scale-100 border border-gray-100 dark:border-slate-600"
           >
             {{ t.tab_create }}
           </button>
           <button
             onclick="switchTab('guide')"
             id="btn-guide"
-            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-gray-200/50 dark:hover:bg-slate-800/50"
+            class="px-5 py-1.5 rounded-md text-xs font-bold transition-all duration-300 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:hover:text-gray-300 hover:bg-white/50 dark:hover:bg-slate-800/50 border border-transparent"
           >
             {{ t.tab_guide }}
           </button>
@@ -227,7 +229,7 @@
         <div id="view-create" class="flex flex-col h-full animate-fade-in">
           <div class="p-5 text-center shrink-0">
             <div
-              class="inline-flex items-center justify-center w-12 h-12 bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-2xl mb-2 shadow-sm ring-4 ring-white dark:ring-slate-700"
+              class="inline-flex items-center justify-center w-12 h-12 bg-green-50 dark:bg-green-900/10 text-green-600 dark:text-green-400 rounded-2xl mb-2 shadow-sm border border-green-100 dark:border-green-900/20"
             >
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -256,11 +258,11 @@
           >
             <div
               id="upload-zone"
-              class="relative group shrink-0 transition-all duration-300 border-2 border-dashed border-gray-200 dark:border-slate-600 rounded-2xl h-28 flex flex-col items-center justify-center cursor-pointer overflow-hidden hover:bg-gray-50 dark:hover:bg-slate-700/30"
+              class="relative group shrink-0 transition-all duration-300 border-2 border-dashed border-gray-200 dark:border-slate-700 rounded-2xl h-28 flex flex-col items-center justify-center cursor-pointer overflow-hidden hover:bg-gray-50/50 dark:hover:bg-slate-700/20 hover:border-green-400 dark:hover:border-green-600"
             >
               <div id="upload-placeholder" class="text-center pointer-events-none">
                 <div
-                  class="text-gray-300 dark:text-slate-500 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors"
+                  class="text-gray-300 dark:text-slate-600 group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors"
                 >
                   <svg
                     class="mx-auto h-8 w-8 mb-1 transform group-hover:-translate-y-1 transition-transform duration-300"
@@ -320,48 +322,49 @@
                 >{{ t.size_label }}</label
               >
               <div class="grid grid-cols-2 gap-3">
-                <label class="cursor-pointer relative group"
-                  ><input type="radio" name="size" value="16" class="peer sr-only" />
+                <label class="cursor-pointer relative group">
+                  <input type="radio" name="size" value="16" class="peer sr-only" />
                   <div
-                    class="h-12 border border-gray-200 dark:border-slate-600 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-300"
+                    class="h-12 border border-gray-200 dark:border-slate-700 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700/50 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-400"
                   >
                     16 x 16
-                  </div></label
-                >
-                <label class="cursor-pointer relative group"
-                  ><input type="radio" name="size" value="32" checked class="peer sr-only" />
+                  </div>
+                </label>
+                <label class="cursor-pointer relative group">
+                  <input type="radio" name="size" value="32" checked class="peer sr-only" />
                   <div
-                    class="h-12 border border-gray-200 dark:border-slate-600 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold relative ring-2 ring-transparent peer-checked:ring-green-500 peer-checked:shadow-sm z-0"
+                    class="h-12 border border-gray-200 dark:border-slate-700 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700/50 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold relative ring-2 ring-transparent peer-checked:ring-green-500 peer-checked:shadow-sm z-0"
                   >
-                    32 x 32<span
+                    32 x 32
+                    <span
                       class="absolute -top-2.5 -right-2 bg-green-500 text-white text-[10px] px-2 py-0.5 rounded-full shadow-lg shadow-green-500/30 transform scale-100 z-10 font-bold tracking-wide whitespace-nowrap"
                       >{{ t.badge }}</span
                     >
-                  </div></label
-                >
-                <label class="cursor-pointer relative group"
-                  ><input type="radio" name="size" value="48" class="peer sr-only" />
+                  </div>
+                </label>
+                <label class="cursor-pointer relative group">
+                  <input type="radio" name="size" value="48" class="peer sr-only" />
                   <div
-                    class="h-12 border border-gray-200 dark:border-slate-600 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-300"
+                    class="h-12 border border-gray-200 dark:border-slate-700 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700/50 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-400"
                   >
                     48 x 48
-                  </div></label
-                >
-                <label class="cursor-pointer relative group"
-                  ><input type="radio" name="size" value="64" class="peer sr-only" />
+                  </div>
+                </label>
+                <label class="cursor-pointer relative group">
+                  <input type="radio" name="size" value="64" class="peer sr-only" />
                   <div
-                    class="h-12 border border-gray-200 dark:border-slate-600 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-300"
+                    class="h-12 border border-gray-200 dark:border-slate-700 rounded-xl hover:border-gray-300 dark:hover:border-slate-500 hover:bg-gray-50 dark:hover:bg-slate-700/50 peer-checked:border-green-500 dark:peer-checked:border-green-500 peer-checked:bg-green-50/30 dark:peer-checked:bg-green-900/20 peer-checked:text-green-700 dark:peer-checked:text-green-400 transition-all flex items-center justify-center text-sm font-bold text-gray-600 dark:text-gray-400"
                   >
                     64 x 64
-                  </div></label
-                >
+                  </div>
+                </label>
               </div>
             </div>
 
             <div class="shrink-0">
               <button
                 type="submit"
-                class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-600/30 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 rtl:flex-row-reverse"
+                class="w-full bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-600/20 hover:shadow-green-600/40 transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2 rtl:flex-row-reverse"
               >
                 <span>{{ t.btn_submit }}</span>
                 <svg
@@ -507,7 +510,7 @@
       <div class="space-y-3">
         {% for faq in t.faq_list %}
         <div
-          class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md border border-gray-100 dark:border-slate-700 hover:border-green-200 dark:hover:border-green-800 transition-all duration-200"
+          class="bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md border border-gray-200/60 dark:border-slate-700 hover:border-green-200 dark:hover:border-green-800 transition-all duration-200"
         >
           <button
             onclick="toggleFaq(this)"
@@ -518,7 +521,7 @@
               >{{ faq.q }}</span
             >
             <svg
-              class="faq-icon w-4 h-4 text-gray-400 transform transition-transform duration-300"
+              class="faq-icon w-4 h-4 text-gray-400 group-hover:text-green-500 transition-all duration-300"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -533,7 +536,7 @@
           </button>
           <div class="faq-content">
             <div
-              class="p-4 pt-0 text-xs text-gray-500 dark:text-gray-400 leading-relaxed opacity-90 min-h-0 border-t border-transparent"
+              class="p-4 pt-0 text-xs text-gray-500 dark:text-gray-400 leading-relaxed opacity-90 min-h-0 border-t border-gray-50 dark:border-slate-700/50 mt-2 pt-3"
             >
               {{ faq.a }}
             </div>
@@ -566,7 +569,7 @@
       onclick="closeShareModal()"
     >
       <div
-        class="bg-white dark:bg-slate-800 rounded-2xl shadow-2xl p-6 w-full max-w-sm transform scale-95 transition-all duration-200 m-4"
+        class="bg-white dark:bg-slate-800 rounded-2xl shadow-[0_25px_50px_-12px_rgba(0,0,0,0.15)] dark:shadow-black/50 p-6 w-full max-w-sm transform scale-95 transition-all duration-200 m-4 border border-gray-100 dark:border-slate-700"
         onclick="event.stopPropagation()"
       >
         <div class="flex justify-between items-center mb-6">
@@ -706,15 +709,19 @@
             'dark:text-white',
             'shadow-sm',
             'scale-100',
+            'border',
+            'border-gray-100',
+            'dark:border-slate-600',
           ],
           i = [
             'text-gray-400',
             'dark:text-gray-500',
             'hover:text-gray-600',
             'dark:hover:text-gray-300',
-            'hover:bg-gray-200/50',
+            'hover:bg-white/50',
             'dark:hover:bg-slate-800/50',
-            'scale-95',
+            'border',
+            'border-transparent',
           ]
         if (tab === 'create') {
           c.classList.remove('hidden')
@@ -799,7 +806,6 @@
           }, 2000)
         })
       }
-      // Share Modal Logic
       const sm = document.getElementById('share-modal')
       function openShareModal() {
         sm.classList.remove('hidden')
