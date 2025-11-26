@@ -6,22 +6,27 @@ from flask import (Flask, Response, redirect, render_template, request,
 from PIL import Image
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_complete')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_rich_v1')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 终极全球语言包
+# 1. 终极全球语言包 (文案增强版)
 # ==========================================
 EN_GUIDE = {
     'tab_create': 'Create',
     'tab_guide': 'Guide',
-    'guide_preview_title': 'Browser Tab Preview', # 新增：预览标题
-    'guide_preview_desc': 'Favicon helps users identify your site.', # 新增：预览描述
-    'step1_title': '1. Place File',
-    'step1_desc': 'Root directory',
-    'step2_title': '2. Insert Code',
-    'step2_desc': 'Inside <head> tags',
+    # 预览区
+    'guide_preview_title': 'Visual Preview',
+    'guide_preview_desc': 'This is how your icon will appear in browser tabs. It helps users instantly recognize your website.',
+    # 步骤 1
+    'step1_title': 'Upload to Server',
+    'step1_desc': 'Download the .ico file and upload it to the root directory of your website (e.g., public_html).',
+    'step1_file_path': '/root/',
+    'step1_file_name': 'favicon.ico',
+    # 步骤 2
+    'step2_title': 'Update HTML Code',
+    'step2_desc': 'Copy the following code snippet and paste it inside the <head> section of your webpages.',
     'guide_copy_btn': 'Copy',
     'guide_copied': 'Copied!',
 }
@@ -35,12 +40,14 @@ TRANSLATIONS = {
         'h1': 'ICO 图标生成器', 'subtitle': '一键生成透明背景图标', 'upload_label': '点击选择 或 拖拽图片', 'size_label': '目标尺寸', 'btn_submit': '生成并下载 .ICO', 'footer': '数据安全保护，不保存任何图片。', 'error_large': '文件过大 (最大 4MB)',
         'tab_create': '制作图标',
         'tab_guide': '使用指南',
-        'guide_preview_title': '效果演示',
-        'guide_preview_desc': '图标将显示在浏览器标签页，提升辨识度。',
-        'step1_title': '1. 放置文件',
-        'step1_desc': '放在网站根目录',
-        'step2_title': '2. 引入代码',
-        'step2_desc': '插入 <head> 标签中',
+        'guide_preview_title': '效果预览',
+        'guide_preview_desc': '您的图标将显示在浏览器标签页上（如下图所示）。这有助于用户在多个标签中快速识别您的品牌。',
+        'step1_title': '上传至服务器',
+        'step1_desc': '下载生成的 .ico 文件，并将其上传到您网站服务器的根目录下。',
+        'step1_file_path': '/根目录/',
+        'step1_file_name': 'favicon.ico',
+        'step2_title': '引入 HTML 代码',
+        'step2_desc': '复制下方的代码片段，粘贴到您网页源文件 <head> 标签之间。',
         'guide_copy_btn': '复制',
         'guide_copied': '已复制!',
     },
@@ -51,12 +58,14 @@ TRANSLATIONS = {
         'h1': 'ICO 圖示產生器', 'subtitle': '一鍵生成透明背景圖示', 'upload_label': '點擊選擇 或 拖曳圖片', 'size_label': '目標尺寸', 'btn_submit': '產生並下載 .ICO', 'footer': '資料安全保護，不保存任何圖片。', 'error_large': '檔案過大 (最大 4MB)',
         'tab_create': '製作圖示',
         'tab_guide': '使用指南',
-        'guide_preview_title': '效果演示',
-        'guide_preview_desc': '圖示將顯示在瀏覽器分頁，提升辨識度。',
-        'step1_title': '1. 放置檔案',
-        'step1_desc': '放在網站根目錄',
-        'step2_title': '2. 引入程式碼',
-        'step2_desc': '插入 <head> 標籤中',
+        'guide_preview_title': '效果預覽',
+        'guide_preview_desc': '您的圖示將顯示在瀏覽器分頁上。這有助於使用者快速識別您的品牌。',
+        'step1_title': '上傳至伺服器',
+        'step1_desc': '下載產生的 .ico 檔案，並將其上傳到您網站伺服器的根目錄下。',
+        'step1_file_path': '/根目錄/',
+        'step1_file_name': 'favicon.ico',
+        'step2_title': '引入 HTML 程式碼',
+        'step2_desc': '複製下方的程式碼片段，貼上到您網頁原始檔 <head> 標籤之間。',
         'guide_copy_btn': '複製',
         'guide_copied': '已複製!',
     },
@@ -143,5 +152,4 @@ def sitemap():
 
 @app.route('/favicon.ico')
 def favicon():
-    # 读取本地文件，确保使用你制作的图标
     return send_file('../favicon.ico', mimetype='image/vnd.microsoft.icon')

@@ -20,7 +20,7 @@
       @keyframes fade-in {
         from {
           opacity: 0;
-          transform: scale(0.98) translateY(8px);
+          transform: scale(0.99) translateY(4px);
         }
         to {
           opacity: 1;
@@ -28,7 +28,7 @@
         }
       }
       .animate-fade-in {
-        animation: fade-in 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        animation: fade-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
       }
 
       .lang-scroll::-webkit-scrollbar {
@@ -247,84 +247,82 @@
 
         <div
           id="view-guide"
-          class="hidden flex-col h-full p-6 animate-fade-in justify-center items-center gap-5 overflow-y-auto scrollbar-hide"
+          class="hidden flex-col h-full p-8 pt-4 animate-fade-in overflow-y-auto scrollbar-hide"
         >
-          <div class="w-full max-w-[280px] group cursor-default">
-            <div
-              class="bg-white rounded-lg shadow-xl shadow-gray-200/50 border border-gray-100 p-3 relative transform transition-transform duration-500 group-hover:-translate-y-1"
-            >
-              <div class="flex items-center gap-2 border-b border-gray-100 pb-2 mb-2">
-                <div
-                  class="flex items-center gap-2 bg-gray-50 border border-gray-100 px-3 py-1.5 rounded-md flex-1"
-                >
-                  <img src="/favicon.ico?v=7" class="w-3.5 h-3.5 animate-pulse" />
-                  <div class="h-1.5 w-16 bg-gray-300 rounded-full"></div>
+          <div class="relative pl-4 border-l-2 border-dashed border-gray-200 ml-3 space-y-8">
+            <div class="relative">
+              <div
+                class="absolute -left-[21px] top-0 w-3 h-3 bg-green-200 rounded-full border-2 border-white"
+              ></div>
+
+              <div class="mb-2">
+                <h3 class="text-sm font-bold text-gray-800">{{ t.guide_preview_title }}</h3>
+                <p class="text-xs text-gray-400 mt-1 leading-relaxed">{{ t.guide_preview_desc }}</p>
+              </div>
+
+              <div
+                class="w-full bg-white rounded-lg shadow-sm border border-gray-100 p-3 relative mx-auto max-w-[240px] transform hover:scale-102 transition-transform"
+              >
+                <div class="flex items-center gap-2 border-b border-gray-50 pb-2 mb-2">
+                  <div
+                    class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-md border border-gray-100 shadow-sm"
+                  >
+                    <img src="/favicon.ico?v=7" class="w-3.5 h-3.5 animate-pulse" />
+                    <div class="h-1.5 w-16 bg-gray-200 rounded-full"></div>
+                  </div>
+                  <div class="h-1.5 w-8 bg-gray-100 rounded-full"></div>
                 </div>
-                <div class="h-1.5 w-6 bg-gray-100 rounded-full"></div>
+                <div class="space-y-2 opacity-20 px-1">
+                  <div class="h-1.5 w-full bg-gray-300 rounded-full"></div>
+                  <div class="h-1.5 w-2/3 bg-gray-300 rounded-full"></div>
+                </div>
               </div>
-              <div class="space-y-2 opacity-20 px-1">
-                <div class="h-2 w-full bg-gray-300 rounded-full"></div>
-                <div class="h-2 w-2/3 bg-gray-300 rounded-full"></div>
+            </div>
+
+            <div class="relative">
+              <div
+                class="absolute -left-[21px] top-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white shadow-sm"
+              ></div>
+
+              <div class="mb-2">
+                <h3 class="text-sm font-bold text-gray-800">{{ t.step1_title }}</h3>
+                <p class="text-xs text-gray-400 mt-1 leading-relaxed">{{ t.step1_desc }}</p>
               </div>
 
               <div
-                class="absolute -right-12 top-0 flex items-center gap-1 bg-green-100 text-green-700 text-[9px] font-bold px-2 py-0.5 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform translate-x-2 group-hover:translate-x-0"
+                class="bg-gray-50 border border-gray-100 rounded-xl p-3 flex items-center justify-between group hover:border-green-200 transition-colors"
               >
-                <span>Result</span>
-                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M10 19l-7-7m0 0l7-7m-7 7h18"
-                  ></path>
-                </svg>
+                <div class="flex items-center gap-2">
+                  <svg
+                    class="w-5 h-5 text-yellow-400 drop-shadow-sm"
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                  >
+                    <path
+                      d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                    ></path>
+                  </svg>
+                  <div class="flex items-baseline gap-1 text-xs font-mono">
+                    <span class="text-gray-400">{{ t.step1_file_path }}</span>
+                    <span class="text-green-700 font-bold bg-green-100/50 px-1 rounded"
+                      >{{ t.step1_file_name }}</span
+                    >
+                  </div>
+                </div>
               </div>
             </div>
-            <p class="text-[10px] text-gray-400 text-center mt-3 font-medium">
-              {{ t.guide_preview_desc }}
-            </p>
-          </div>
 
-          <div class="w-0.5 h-4 bg-gray-100 rounded-full"></div>
-
-          <div class="w-full flex items-center gap-3">
-            <div
-              class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center text-xs font-bold shrink-0 border border-green-100"
-            >
-              1
-            </div>
-            <div
-              class="flex-1 bg-gray-50 border border-gray-100 rounded-xl p-3 flex items-center justify-between group hover:border-green-200 transition-colors"
-            >
-              <div class="flex items-center gap-2">
-                <svg class="w-4 h-4 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                  ></path>
-                </svg>
-                <span class="text-xs text-gray-400">/root/</span>
-                <span class="text-xs font-bold text-gray-700">favicon.ico</span>
-              </div>
+            <div class="relative">
               <div
-                class="text-[9px] text-gray-400 uppercase tracking-wider font-bold group-hover:text-green-600 transition-colors"
-              >
-                Upload
+                class="absolute -left-[21px] top-1 w-3 h-3 bg-slate-700 rounded-full border-2 border-white shadow-sm"
+              ></div>
+
+              <div class="mb-2">
+                <h3 class="text-sm font-bold text-gray-800">{{ t.step2_title }}</h3>
+                <p class="text-xs text-gray-400 mt-1 leading-relaxed">{{ t.step2_desc }}</p>
               </div>
-            </div>
-          </div>
 
-          <div class="w-full flex items-start gap-3">
-            <div
-              class="w-8 h-8 rounded-full bg-slate-50 text-slate-600 flex items-center justify-center text-xs font-bold shrink-0 border border-slate-100"
-            >
-              2
-            </div>
-
-            <div class="flex-1 relative group">
-              <div
-                class="bg-[#1e293b] rounded-xl p-3 shadow-lg relative overflow-hidden border border-slate-700/50"
-              >
+              <div class="bg-[#1e293b] rounded-xl p-4 shadow-lg relative group overflow-hidden">
                 <code class="font-mono text-[10px] text-slate-300 block leading-relaxed">
                   <span class="opacity-50">&lt;head&gt;</span><br />
                   &nbsp;&nbsp;&lt;link rel="icon" href="<span class="text-green-400 font-bold"
@@ -334,7 +332,7 @@
                 </code>
                 <button
                   onclick="copyCode(this)"
-                  class="absolute top-1/2 -translate-y-1/2 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] px-2.5 py-1 rounded-lg transition-all backdrop-blur-md border border-white/5 font-medium opacity-0 group-hover:opacity-100 flex items-center gap-1"
+                  class="absolute top-3 right-3 bg-white/10 hover:bg-white/20 text-white text-[10px] px-2.5 py-1 rounded transition-all backdrop-blur-md border border-white/5 font-medium flex items-center gap-1 opacity-80 hover:opacity-100"
                 >
                   {{ t.guide_copy_btn }}
                 </button>
@@ -422,11 +420,11 @@
         const code = '<link rel="icon" href="favicon.ico" />'
         navigator.clipboard.writeText(code).then(() => {
           const originalHTML = btn.innerHTML
-          btn.innerText = '{{ t.guide_copied }}'
-          btn.classList.add('text-green-400')
+          btn.innerHTML = '<span class="text-green-400">{{ t.guide_copied }}</span>'
+          btn.classList.add('bg-white/20')
           setTimeout(() => {
             btn.innerHTML = originalHTML
-            btn.classList.remove('text-green-400')
+            btn.classList.remove('bg-white/20')
           }, 2000)
         })
       }
