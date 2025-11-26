@@ -6,27 +6,27 @@ from flask import (Flask, Response, redirect, render_template, request,
 from PIL import Image
 
 app = Flask(__name__, template_folder='../templates')
-app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_rich_v1')
+app.secret_key = os.environ.get('SECRET_KEY', 'global_ico_guide_balanced_v2')
 app.url_map.strict_slashes = False
 app.config['MAX_CONTENT_LENGTH'] = 4.5 * 1024 * 1024
 
 # ==========================================
-# 1. 终极全球语言包 (文案增强版)
+# 1. 终极全球语言包 (文案加长版)
 # ==========================================
 EN_GUIDE = {
     'tab_create': 'Create',
     'tab_guide': 'Guide',
     # 预览区
     'guide_preview_title': 'Visual Preview',
-    'guide_preview_desc': 'This is how your icon will appear in browser tabs. It helps users instantly recognize your website.',
+    'guide_preview_desc': 'Your icon will be displayed in browser tabs, bookmarks, and history to help users identify your brand instantly.',
     # 步骤 1
     'step1_title': 'Upload to Server',
-    'step1_desc': 'Download the .ico file and upload it to the root directory of your website (e.g., public_html).',
+    'step1_desc': 'Download the generated .ico file and upload it to the root directory of your website server (e.g. /public_html).',
     'step1_file_path': '/root/',
     'step1_file_name': 'favicon.ico',
     # 步骤 2
     'step2_title': 'Update HTML Code',
-    'step2_desc': 'Copy the following code snippet and paste it inside the <head> section of your webpages.',
+    'step2_desc': 'Copy the code below and paste it into the <head> section of your HTML files, before the closing tag.',
     'guide_copy_btn': 'Copy',
     'guide_copied': 'Copied!',
 }
@@ -41,13 +41,13 @@ TRANSLATIONS = {
         'tab_create': '制作图标',
         'tab_guide': '使用指南',
         'guide_preview_title': '效果预览',
-        'guide_preview_desc': '您的图标将显示在浏览器标签页上（如下图所示）。这有助于用户在多个标签中快速识别您的品牌。',
+        'guide_preview_desc': '您的图标将显示在浏览器标签页、书签栏及历史记录中。这有助于用户在多个标签中快速识别您的品牌。',
         'step1_title': '上传至服务器',
-        'step1_desc': '下载生成的 .ico 文件，并将其上传到您网站服务器的根目录下。',
+        'step1_desc': '下载生成的 .ico 文件，并将其上传到您网站服务器的根目录下（通常是 public_html 或 www 目录）。',
         'step1_file_path': '/根目录/',
         'step1_file_name': 'favicon.ico',
         'step2_title': '引入 HTML 代码',
-        'step2_desc': '复制下方的代码片段，粘贴到您网页源文件 <head> 标签之间。',
+        'step2_desc': '复制下方的代码片段，粘贴到您网页源文件 <head> 标签之间，通常放在 <title> 下方。',
         'guide_copy_btn': '复制',
         'guide_copied': '已复制!',
     },
@@ -59,18 +59,18 @@ TRANSLATIONS = {
         'tab_create': '製作圖示',
         'tab_guide': '使用指南',
         'guide_preview_title': '效果預覽',
-        'guide_preview_desc': '您的圖示將顯示在瀏覽器分頁上。這有助於使用者快速識別您的品牌。',
+        'guide_preview_desc': '您的圖示將顯示在瀏覽器分頁、書籤列及歷史記錄中。這有助於使用者快速識別您的品牌。',
         'step1_title': '上傳至伺服器',
-        'step1_desc': '下載產生的 .ico 檔案，並將其上傳到您網站伺服器的根目錄下。',
+        'step1_desc': '下載產生的 .ico 檔案，並將其上傳到您網站伺服器的根目錄下（通常是 public_html 或 www 目錄）。',
         'step1_file_path': '/根目錄/',
         'step1_file_name': 'favicon.ico',
         'step2_title': '引入 HTML 程式碼',
-        'step2_desc': '複製下方的程式碼片段，貼上到您網頁原始檔 <head> 標籤之間。',
+        'step2_desc': '複製下方的程式碼片段，貼上到您網頁原始檔 <head> 標籤之間，通常放在 <title> 下方。',
         'guide_copy_btn': '複製',
         'guide_copied': '已複製!',
     },
 
-    # --- 其他语言 (使用 EN_GUIDE 填充) ---
+    # --- 其他语言 ---
     'es': { **EN_GUIDE, 'name': 'Español', 'dir': 'ltr', 'recommend': 'Recomendado', 'badge': 'HOT', 'seo_title': 'Convertidor ICO Online', 'seo_desc': 'Convierte imágenes a ICO.', 'h1': 'Convertidor ICO', 'subtitle': 'Generador de Favicon', 'upload_label': 'Clic para subir', 'size_label': 'Tamaño', 'btn_submit': 'Generar .ICO', 'footer': 'Privacidad protegida.', 'error_large': 'Archivo muy grande' },
     'fr': { **EN_GUIDE, 'name': 'Français', 'dir': 'ltr', 'recommend': 'Recommandé', 'badge': 'TOP', 'seo_title': 'Convertisseur ICO', 'seo_desc': 'Convertir en ICO.', 'h1': 'Convertisseur ICO', 'subtitle': 'Générateur de Favicon', 'upload_label': 'Uploader une image', 'size_label': 'Taille', 'btn_submit': 'Générer .ICO', 'footer': 'Confidentialité respectée.', 'error_large': 'Fichier trop volumineux' },
     'de': { **EN_GUIDE, 'name': 'Deutsch', 'dir': 'ltr', 'recommend': 'Empfohlen', 'badge': 'TOP', 'seo_title': 'ICO Konverter', 'seo_desc': 'In ICO umwandeln.', 'h1': 'ICO Konverter', 'subtitle': 'Favicon-Generator', 'upload_label': 'Bild hochladen', 'size_label': 'Größe', 'btn_submit': '.ICO Herunterladen', 'footer': 'Datenschutz.', 'error_large': 'Datei zu groß' },
