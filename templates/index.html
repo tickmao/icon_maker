@@ -247,7 +247,7 @@
 
         <div
           id="view-guide"
-          class="hidden flex-col h-full p-8 pt-4 animate-fade-in overflow-y-auto scrollbar-hide"
+          class="hidden flex-col h-full p-8 pt-4 animate-fade-in justify-center overflow-y-auto scrollbar-hide"
         >
           <div class="relative pl-4 border-l-2 border-dashed border-gray-200 ml-3 space-y-8">
             <div class="relative">
@@ -255,26 +255,43 @@
                 class="absolute -left-[21px] top-0 w-3 h-3 bg-green-200 rounded-full border-2 border-white"
               ></div>
 
-              <div class="mb-2">
+              <div class="mb-3">
                 <h3 class="text-sm font-bold text-gray-800">{{ t.guide_preview_title }}</h3>
-                <p class="text-xs text-gray-400 mt-1 leading-relaxed">{{ t.guide_preview_desc }}</p>
+                <p class="text-[10px] text-gray-400 mt-0.5">{{ t.guide_preview_desc }}</p>
               </div>
 
               <div
-                class="w-full bg-white rounded-lg shadow-sm border border-gray-100 p-3 relative mx-auto max-w-[240px] transform hover:scale-102 transition-transform"
+                class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3 group hover:border-green-300 transition-colors duration-300"
               >
-                <div class="flex items-center gap-2 border-b border-gray-50 pb-2 mb-2">
+                <div class="flex items-center gap-1.5 mb-3 px-1">
                   <div
-                    class="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-md border border-gray-100 shadow-sm"
-                  >
-                    <img src="/favicon.ico?v=7" class="w-3.5 h-3.5 animate-pulse" />
-                    <div class="h-1.5 w-16 bg-gray-200 rounded-full"></div>
-                  </div>
-                  <div class="h-1.5 w-8 bg-gray-100 rounded-full"></div>
+                    class="w-2.5 h-2.5 rounded-full bg-gray-300 group-hover:bg-red-400 transition-colors"
+                  ></div>
+                  <div
+                    class="w-2.5 h-2.5 rounded-full bg-gray-300 group-hover:bg-yellow-400 transition-colors"
+                  ></div>
+                  <div
+                    class="w-2.5 h-2.5 rounded-full bg-gray-300 group-hover:bg-green-400 transition-colors"
+                  ></div>
                 </div>
-                <div class="space-y-2 opacity-20 px-1">
-                  <div class="h-1.5 w-full bg-gray-300 rounded-full"></div>
-                  <div class="h-1.5 w-2/3 bg-gray-300 rounded-full"></div>
+
+                <div
+                  class="bg-white border border-gray-200 rounded-lg p-2 flex items-center gap-3 shadow-sm"
+                >
+                  <div
+                    class="relative flex items-center justify-center w-8 h-8 bg-gray-50 rounded border border-gray-100 shrink-0"
+                  >
+                    <img src="/favicon.ico?v=7" class="w-4 h-4 animate-pulse" />
+                  </div>
+                  <div class="flex-1 space-y-1.5">
+                    <div class="h-1.5 w-3/4 bg-gray-100 rounded-full"></div>
+                    <div class="h-1.5 w-1/2 bg-gray-50 rounded-full"></div>
+                  </div>
+                </div>
+
+                <div class="mt-3 space-y-2 opacity-30 px-1">
+                  <div class="h-2 w-full bg-gray-200 rounded-full"></div>
+                  <div class="h-2 w-5/6 bg-gray-200 rounded-full"></div>
                 </div>
               </div>
             </div>
@@ -286,28 +303,34 @@
 
               <div class="mb-2">
                 <h3 class="text-sm font-bold text-gray-800">{{ t.step1_title }}</h3>
-                <p class="text-xs text-gray-400 mt-1 leading-relaxed">{{ t.step1_desc }}</p>
+                <p class="text-[10px] text-gray-400 mt-0.5">{{ t.step1_desc }}</p>
               </div>
 
               <div
-                class="bg-gray-50 border border-gray-100 rounded-xl p-3 flex items-center justify-between group hover:border-green-200 transition-colors"
+                class="w-full bg-gray-50 border border-gray-100 rounded-xl p-3 flex items-center justify-between group hover:border-green-200 transition-colors"
               >
-                <div class="flex items-center gap-2">
-                  <svg
-                    class="w-5 h-5 text-yellow-400 drop-shadow-sm"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
-                    ></path>
-                  </svg>
-                  <div class="flex items-baseline gap-1 text-xs font-mono">
-                    <span class="text-gray-400">{{ t.step1_file_path }}</span>
-                    <span class="text-green-700 font-bold bg-green-100/50 px-1 rounded"
+                <div class="flex items-center gap-3">
+                  <div class="bg-white p-1.5 rounded-md shadow-sm border border-gray-100">
+                    <svg class="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <path
+                        d="M2 6a2 2 0 012-2h5l2 2h5a2 2 0 012 2v6a2 2 0 01-2 2H4a2 2 0 01-2-2V6z"
+                      ></path>
+                    </svg>
+                  </div>
+                  <div class="flex flex-col">
+                    <span class="text-[10px] text-gray-400 font-mono leading-none mb-0.5"
+                      >{{ t.step1_file_path }}</span
+                    >
+                    <span
+                      class="text-xs text-green-700 font-bold font-mono bg-green-100/50 px-1 rounded -ml-1"
                       >{{ t.step1_file_name }}</span
                     >
                   </div>
+                </div>
+                <div
+                  class="text-[9px] font-bold text-gray-300 uppercase tracking-widest mr-1 group-hover:text-green-500 transition-colors"
+                >
+                  File
                 </div>
               </div>
             </div>
@@ -319,10 +342,12 @@
 
               <div class="mb-2">
                 <h3 class="text-sm font-bold text-gray-800">{{ t.step2_title }}</h3>
-                <p class="text-xs text-gray-400 mt-1 leading-relaxed">{{ t.step2_desc }}</p>
+                <p class="text-[10px] text-gray-400 mt-0.5">{{ t.step2_desc }}</p>
               </div>
 
-              <div class="bg-[#1e293b] rounded-xl p-4 shadow-lg relative group overflow-hidden">
+              <div
+                class="w-full bg-[#1e293b] rounded-xl p-4 shadow-lg relative group overflow-hidden"
+              >
                 <code class="font-mono text-[10px] text-slate-300 block leading-relaxed">
                   <span class="opacity-50">&lt;head&gt;</span><br />
                   &nbsp;&nbsp;&lt;link rel="icon" href="<span class="text-green-400 font-bold"
